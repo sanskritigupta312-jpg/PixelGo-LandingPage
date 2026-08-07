@@ -1,0 +1,5730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PixelGo HMS — The Hotel Operating System</title>
+
+  <!-- Font Onest -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Palette & CSS Variables */
+    :root {
+      --background: #ffffff;
+      --foreground: #0a0a0a;
+      --brand: #2563c9;
+      /* primary royal blue */
+      --brand-deep: #0f2f63;
+      /* deep navy — hero/stats/footer base */
+      --brand-light: #5790e6;
+      /* light blue accent / focus ring */
+      --accent-teal: #0b6e97;
+      /* blue court caption tint */
+      --accent-gold: #c9a84c;
+      /* Editorial Gold */
+      --gold-bright: #ffd700;
+      /* Bright Gold */
+      --surface: #f4f4f4;
+      /* off-white section bg */
+      --surface-card: #ffffff;
+      --ink: #0a0a0a;
+      /* near-black headings */
+      --ink-soft: #717784;
+      /* muted body */
+      --ghost: #d7dae1;
+      /* oversized ghost text */
+      --hairline: #e6e8ec;
+      /* subtle borders */
+      --on-brand: #ffffff;
+      /* text on navy */
+
+      /* radii */
+      --radius-card: 1.5rem;
+      --radius-card-lg: 2rem;
+      --radius-pill: 62.5rem;
+    }
+
+    /* CSS Reset */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: auto;
+      /* Handled by Lenis */
+    }
+
+    /* Adaptive Scale Down Media Queries */
+    @media (max-width: 1920px) {
+      html {
+        font-size: 0.833333vw;
+      }
+    }
+
+    @media (max-width: 1440px) {
+      html {
+        font-size: 1.111111vw;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      html {
+        font-size: 1.5625vw;
+      }
+    }
+
+    @media (max-width: 640px) {
+      html {
+        font-size: 4.444444vw;
+      }
+    }
+
+    body {
+      font-family: "Onest", system-ui, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Scroll Lock Styles */
+    html.scroll-locked {
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    html.scroll-locked body {
+      overflow: hidden;
+      height: 100%;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      background: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+
+    /* Main Container & Page Framing Insets */
+    main {
+      width: 100%;
+      overflow-x: clip;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      /* Gap between sections */
+    }
+
+    @media (min-width: 640px) {
+      main {
+        padding: 0;
+      }
+    }
+
+    /* Reusable UI Components */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: var(--radius-pill);
+      display: block;
+    }
+
+    .eyebrow.tone-dark {
+      color: var(--brand-light);
+    }
+
+    .eyebrow.tone-dark::before {
+      background: var(--brand);
+    }
+
+    .eyebrow.tone-light {
+      color: var(--gold-bright);
+    }
+
+    .eyebrow.tone-light::before {
+      background: var(--brand-light);
+    }
+
+    /* Buttons */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: var(--radius-pill);
+      padding: 0.875rem 1.75rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+    }
+
+    .btn-pill svg {
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.1s ease;
+    }
+
+    .btn-pill.variant-light {
+      background: #ffffff;
+      color: var(--brand-deep);
+    }
+
+    .btn-pill.variant-light:hover {
+      background: var(--brand);
+      color: #ffffff;
+    }
+
+    .btn-pill.variant-solid {
+      background: var(--brand);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(76, 111, 255, 0.3);
+    }
+
+    .btn-pill.variant-solid:hover {
+      background: #3b5bdb;
+      transform: translateY(-1px);
+    }
+
+    .btn-pill.variant-outline {
+      border: 1px solid var(--hairline);
+      color: #ffffff;
+      background: transparent;
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-pill.variant-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #ffffff;
+    }
+
+    .btn-arrow {
+      width: 3rem;
+      height: 3rem;
+      border-radius: var(--radius-pill);
+      display: grid;
+      place-items: center;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    @media (min-width: 640px) {
+      .btn-arrow {
+        width: 3.5rem;
+        height: 3.5rem;
+      }
+    }
+
+    .btn-arrow svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.1s ease;
+    }
+
+    .btn-arrow.variant-outline {
+      border: 1px solid var(--hairline);
+      color: #ffffff;
+      background: transparent;
+    }
+
+    .btn-arrow.variant-outline:hover {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-arrow.variant-solid {
+      background: var(--brand);
+      border: 1px solid var(--brand);
+      color: #ffffff;
+    }
+
+    .btn-arrow.variant-solid:hover {
+      background: #3b5bdb;
+      border-color: #3b5bdb;
+    }
+
+    /* Carousel Dots */
+    .carousel-dots {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .carousel-dots button {
+      padding: 0.375rem;
+    }
+
+    .carousel-dots .dot-pill {
+      height: 0.375rem;
+      border-radius: var(--radius-pill);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s;
+    }
+
+    .carousel-dots button[aria-current="true"] .dot-pill {
+      width: 1.25rem;
+    }
+
+    .carousel-dots button[aria-current="false"] .dot-pill {
+      width: 0.375rem;
+    }
+
+    .carousel-dots.tone-light .dot-pill {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .carousel-dots.tone-light button[aria-current="true"] .dot-pill {
+      background: #ffffff;
+    }
+
+    .carousel-dots.tone-dark .dot-pill {
+      background: var(--ghost);
+    }
+
+    .carousel-dots.tone-dark button[aria-current="true"] .dot-pill {
+      background: var(--brand-light);
+    }
+
+    /* Reveal Primitives Classes */
+    .clip-mask-wrapper {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      padding-bottom: 0.12em;
+      /* Prevent descender cut-off */
+    }
+
+    .clip-mask-inner {
+      display: inline-block;
+      transform: translateY(115%);
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .clip-mask-inner.revealed {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .reveal-inview {
+      opacity: 0;
+      transform: translateY(1.75rem);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-inview.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Preloader Curtain */
+    .loader-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--background);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .loader-wordmark {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+
+    .loader-wordmark span {
+      background: linear-gradient(135deg, var(--foreground), var(--brand-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .loader-track {
+      width: 10rem;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loader-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: var(--brand-light);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    /* Header Styling */
+    header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 1.5rem 0;
+      font-size: 0.875rem;
+      color: #ffffff;
+      z-index: 10;
+      position: relative;
+    }
+
+    @media (min-width: 640px) {
+      header {
+        padding: 2rem 2.5rem 0;
+      }
+    }
+
+    .header-nav {
+      flex: 1;
+      display: flex;
+      gap: 2.25rem;
+      align-items: center;
+    }
+
+    @media (max-width: 1024px) {
+      .header-nav {
+        display: none;
+      }
+    }
+
+    .header-nav-item {
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    .header-nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      transition: color 0.25s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .header-nav-link:hover {
+      color: #ffffff;
+    }
+
+    /* Mega Menu Dropdown Solution */
+    .header-mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 44rem;
+      background: rgba(13, 18, 38, 0.95);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.1fr;
+      gap: 2rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(1rem);
+      transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+      z-index: 100;
+    }
+
+    .header-nav-item:hover .header-mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .mega-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .mega-header-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brand-light);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .mega-link-item {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+      transition: background 0.25s, border-color 0.25s;
+      border: 1px solid transparent;
+    }
+
+    .mega-link-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .mega-link-icon {
+      font-size: 1.25rem;
+      padding: 0.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0.5rem;
+      height: fit-content;
+    }
+
+    .mega-link-name {
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 0.8125rem;
+    }
+
+    .mega-link-desc {
+      font-size: 0.6875rem;
+      color: var(--ink-soft);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    /* Standard Dropdown */
+    .header-standard-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 14rem;
+      background: rgba(13, 18, 38, 0.95);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(1rem);
+      transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+      z-index: 100;
+    }
+
+    .header-nav-item:hover .header-standard-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-link-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: var(--ink-soft);
+      border-radius: 0.5rem;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .dropdown-link-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .header-logo span {
+      background: linear-gradient(135deg, var(--foreground), var(--brand-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @media (min-width: 1024px) {
+      .header-logo {
+        justify-content: center;
+        flex: 1;
+      }
+    }
+
+    .logo-mark {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: var(--brand-light);
+    }
+
+    .header-actions {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .btn-login {
+      color: rgba(255, 255, 255, 0.85);
+      transition: color 0.2s;
+    }
+
+    .btn-login:hover {
+      color: #ffffff;
+    }
+
+    @media (max-width: 640px) {
+      .btn-login {
+        display: none;
+      }
+    }
+
+    .burger-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      gap: 5px;
+      transition: background 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .burger-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .burger-line {
+      width: 1rem;
+      height: 1.5px;
+      background: #ffffff;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: var(--brand-deep);
+      color: #ffffff;
+      position: relative;
+      border-radius: 0;
+      height: auto;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      padding-bottom: 4rem;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-section {
+        min-height: calc(100vh - 1.5rem);
+      }
+    }
+
+    .hero-bg {
+      position: absolute;
+      left: 0;
+      top: -16%;
+      height: 132%;
+      width: 100%;
+      z-index: -10;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.18;
+    }
+
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(76, 111, 255, 0.15), transparent 60%),
+        linear-gradient(to bottom, rgba(8, 11, 24, 0.8), rgba(8, 11, 24, 0.95));
+    }
+
+    .hero-content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 2rem 1.5rem;
+      margin-top: 1rem;
+      align-items: center;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-content-grid {
+        grid-template-columns: 1fr 1.1fr;
+        padding: 3rem 3.5rem 0;
+        gap: 4rem;
+      }
+    }
+
+    .hero-left-side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(76, 111, 255, 0.12);
+      border: 1px solid rgba(76, 111, 255, 0.25);
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--brand);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-badge-dot {
+      width: 0.375rem;
+      height: 0.375rem;
+      background: var(--brand-light);
+      border-radius: var(--radius-pill);
+      box-shadow: 0 0 8px var(--brand-light);
+    }
+
+    .hero-title {
+      font-size: 10vw;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-title {
+        font-size: 5.5vw;
+      }
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      max-width: 32rem;
+    }
+
+    @media (min-width: 640px) {
+      .hero-sub {
+        font-size: 1.125rem;
+      }
+    }
+
+    .hero-btn-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Mock Dashboard (Hero Right Column) */
+    .hero-right-side {
+      width: 100%;
+      perspective: 1000px;
+    }
+
+    .dashboard-mock {
+      width: 100%;
+      background: rgba(13, 18, 38, 0.65);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transform: rotateY(-3deg) rotateX(2deg);
+      transition: transform 0.5s;
+    }
+
+    .dashboard-mock:hover {
+      transform: rotateY(0) rotateX(0);
+    }
+
+    .mock-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--hairline);
+      padding-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .mock-tabs {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .mock-tab {
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      transition: all 0.25s;
+    }
+
+    .mock-tab.active {
+      background: rgba(76, 111, 255, 0.12);
+      color: var(--brand);
+    }
+
+    .mock-switcher {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #ffffff;
+      padding: 0.375rem 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.5rem;
+      border: 1px solid var(--hairline);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .mock-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+
+    .mock-metric {
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      border-radius: 0.75rem;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .mock-metric-num {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .mock-metric-num.m-blue {
+      color: var(--brand);
+    }
+
+    .mock-metric-num.m-gold {
+      color: var(--accent-gold);
+    }
+
+    .mock-metric-num.m-green {
+      color: var(--brand-light);
+    }
+
+    .mock-metric-num.m-red {
+      color: #ff6b8a;
+    }
+
+    .mock-metric-lbl {
+      font-size: 0.5625rem;
+      color: var(--ink-soft);
+      line-height: 1.2;
+    }
+
+    .mock-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+      .mock-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mock-bookings {
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .mock-section-title {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mock-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.375rem 0;
+      border-bottom: 1px dashed var(--hairline);
+    }
+
+    .mock-row:last-child {
+      border-bottom: none;
+    }
+
+    .mock-row-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .mock-row-sub {
+      font-size: 0.5625rem;
+      color: var(--ink-soft);
+      margin-top: 1px;
+    }
+
+    .mock-tag {
+      font-size: 0.5rem;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .mock-tag.tag-daily {
+      background: rgba(76, 111, 255, 0.15);
+      color: var(--brand);
+    }
+
+    .mock-tag.tag-monthly {
+      background: rgba(0, 212, 168, 0.15);
+      color: var(--brand-light);
+    }
+
+    .mock-tag.tag-hourly {
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--accent-gold);
+    }
+
+    .mock-amount {
+      font-size: 0.6875rem;
+      font-weight: 600;
+    }
+
+    .mock-chart-box {
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mock-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 4.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .mock-bar {
+      width: 0.5rem;
+      border-radius: 2px 2px 0 0;
+      background: var(--brand);
+    }
+
+    .mock-bar.bar-1 {
+      height: 40%;
+    }
+
+    .mock-bar.bar-2 {
+      height: 60%;
+      background: var(--brand-light);
+    }
+
+    .mock-bar.bar-3 {
+      height: 80%;
+    }
+
+    .mock-bar.bar-4 {
+      height: 50%;
+    }
+
+    .mock-bar.bar-5 {
+      height: 75%;
+      background: var(--brand-light);
+    }
+
+    .mock-bar.bar-6 {
+      height: 90%;
+    }
+
+    .mock-chart-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.5rem;
+      color: var(--ink-soft);
+      margin-top: 0.25rem;
+    }
+
+    .mock-status-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .mock-status {
+      flex: 1;
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 8rem;
+    }
+
+    .status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+
+    .status-dot.dot-green {
+      background: var(--brand-light);
+      box-shadow: 0 0 6px var(--brand-light);
+    }
+
+    .status-dot.dot-blue {
+      background: var(--brand);
+      box-shadow: 0 0 6px var(--brand);
+    }
+
+    .status-dot.dot-gold {
+      background: var(--accent-gold);
+      box-shadow: 0 0 6px var(--accent-gold);
+    }
+
+    .mock-status-text {
+      font-size: 0.625rem;
+      color: var(--ink-soft);
+      line-height: 1.2;
+    }
+
+    .mock-status-text strong {
+      display: block;
+      color: #ffffff;
+    }
+
+    /* Marquee Styling */
+    .marquee-section {
+      width: 100%;
+      overflow: hidden;
+      background: var(--surface);
+      border-radius: var(--radius-card-lg);
+      padding: 1.25rem 0;
+      position: relative;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: scrollMarquee 35s linear infinite;
+    }
+
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0 2rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+      white-space: nowrap;
+    }
+
+    .marq-dot {
+      width: 0.375rem;
+      height: 0.375rem;
+      background: var(--brand-light);
+      border-radius: var(--radius-pill);
+    }
+
+    @keyframes scrollMarquee {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Stats Section */
+    .stats-section {
+      background: var(--brand-deep);
+      color: #ffffff;
+      padding: 5rem 1.5rem;
+      z-index: 1;
+      border-radius: var(--radius-card-lg);
+    }
+
+    @media (min-width: 640px) {
+      .stats-section {
+        padding: 6rem 2.5rem;
+      }
+    }
+
+    .section-header-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .section-header-wrap {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+
+    .stats-title {
+      font-size: 3rem;
+      font-weight: 500;
+      margin-top: 1rem;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .stats-desc {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      max-width: 30rem;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 2rem;
+      margin-top: 4rem;
+    }
+
+    @media (min-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stat-cell {
+      border-top: 1px solid var(--hairline);
+      padding-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-val {
+      font-size: 3.75rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff, var(--brand-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @media (min-width: 640px) {
+      .stat-val {
+        font-size: 4.5rem;
+      }
+    }
+
+    .stat-lbl {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 0.75rem;
+      font-weight: 600;
+    }
+
+    .stat-sub {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      margin-top: 0.25rem;
+      line-height: 1.4;
+    }
+
+    /* Brand Logo Carousel */
+    .brand-carousel-section {
+      padding: 3rem 0;
+      background: var(--surface);
+      overflow: hidden;
+      position: relative;
+      border-radius: var(--radius-card-lg);
+    }
+
+    .brand-carousel-title {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--ink-soft);
+      margin-bottom: 2rem;
+    }
+
+    .brand-carousel-title span {
+      color: var(--accent-gold);
+    }
+
+    .brand-track-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .brand-track-wrapper::before,
+    .brand-track-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .brand-track-wrapper::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--surface), transparent);
+    }
+
+    .brand-track-wrapper::after {
+      right: 0;
+      background: linear-gradient(-90deg, var(--surface), transparent);
+    }
+
+    .brand-logo-track {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      width: max-content;
+      animation: scrollMarquee 25s linear infinite;
+    }
+
+    .brand-logo-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1rem;
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+
+    .brand-logo-card:hover {
+      background: rgba(76, 111, 255, 0.1);
+      border-color: var(--brand);
+      transform: translateY(-3px);
+    }
+
+    .brand-logo-card span.bl-icon {
+      font-size: 1.25rem;
+    }
+
+    /* Modules Section */
+    .modules-section {
+      background: var(--surface);
+      color: var(--ink);
+      padding: 6rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      border-radius: var(--radius-card-lg);
+    }
+
+    @media (min-width: 640px) {
+      .modules-section {
+        padding: 6rem 2.5rem;
+      }
+    }
+
+    .modules-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+    }
+
+    .modules-list {
+      margin-top: 3.5rem;
+      list-style: none;
+    }
+
+    .module-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--hairline);
+      transition: background-color 0.3s;
+    }
+
+    .module-row:last-child {
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .module-row:hover {
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .module-idx {
+      width: 2.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--brand);
+    }
+
+    .module-main {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .module-main {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 2rem;
+      }
+    }
+
+    .module-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    @media (min-width: 768px) {
+      .module-name {
+        font-size: 1.875rem;
+        width: 18rem;
+        flex-shrink: 0;
+      }
+    }
+
+    .module-desc {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+    }
+
+    .module-arrow {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--hairline);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      color: var(--ink);
+      background: var(--surface-card);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .module-arrow svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      opacity: 0.65;
+      transition: transform 0.1s ease, opacity 0.1s ease;
+    }
+
+    /* Problem Section (Tilted Cards) */
+    .problem-section {
+      background: var(--background);
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      z-index: 1;
+    }
+
+    @media (min-width: 1024px) {
+      .problem-section {
+        grid-template-columns: 1fr 1.2fr;
+        padding: 7rem 3.5rem;
+        align-items: center;
+      }
+    }
+
+    .problem-left {
+      max-width: 28rem;
+    }
+
+    .problem-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+    }
+
+    .problem-desc {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      margin-top: 1.5rem;
+    }
+
+    .problem-stat {
+      display: flex;
+      gap: 1rem;
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      padding: 1.25rem;
+      margin-top: 2rem;
+      align-items: center;
+    }
+
+    .problem-stat-num {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--brand-light);
+    }
+
+    .problem-stat-text {
+      font-size: 0.8125rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    /* Pain Cards Tilted Grid */
+    .problem-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .pain-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      padding: 1.5rem;
+      display: flex;
+      gap: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+      transition: transform 0.3s ease;
+    }
+
+    .pain-icon {
+      font-size: 2rem;
+      padding: 0.5rem;
+      background: var(--surface-card);
+      border-radius: 0.75rem;
+      height: fit-content;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .pain-body h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .pain-body p {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    /* Tilted styling for desktop cards */
+    @media (min-width: 768px) {
+      .pain-card.pc-1 {
+        transform: rotate(-2deg) translateY(-5px);
+      }
+
+      .pain-card.pc-2 {
+        transform: rotate(1.5deg) translateX(10px) translateY(5px);
+      }
+
+      .pain-card.pc-3 {
+        transform: rotate(-1deg) translateY(10px);
+      }
+    }
+
+    /* Capabilities / Features Section */
+    .features-section {
+      background: var(--surface);
+      border-radius: var(--radius-card-lg);
+      padding: 5rem 1.5rem;
+      z-index: 1;
+    }
+
+    @media (min-width: 640px) {
+      .features-section {
+        padding: 6rem 2.5rem;
+      }
+    }
+
+    .features-header {
+      text-align: center;
+      max-width: 48rem;
+      margin: 0 auto 4rem auto;
+    }
+
+    .features-section-title {
+      font-size: 3rem;
+      font-weight: 500;
+      margin-top: 1rem;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .features-section-desc {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      margin-top: 1rem;
+    }
+
+    .features-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+    }
+
+    .feature-item-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (min-width: 1024px) {
+      .feature-item-row {
+        grid-template-columns: 1fr 1.1fr;
+      }
+
+      .feature-item-row.reverse {
+        grid-template-columns: 1.1fr 1fr;
+      }
+
+      .feature-item-row.reverse .feature-content {
+        order: 2;
+      }
+    }
+
+    .feature-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .feature-title {
+      font-size: 2.25rem;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      font-size: 0.9375rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .feat-points-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      list-style: none;
+    }
+
+    .feat-point-row {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .feat-point-icon-box {
+      font-size: 1.25rem;
+      padding: 0.375rem;
+      background: rgba(76, 111, 255, 0.1);
+      color: var(--brand);
+      border-radius: 0.5rem;
+      line-height: 1;
+    }
+
+    .feat-point-text-box h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .feat-point-text-box p {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .feature-visual {
+      width: 100%;
+      background: var(--surface-card);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Smart Calendar Widget */
+    .booking-engine-vis {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .booking-types {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+
+    .booking-type-btn {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-align: center;
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      transition: all 0.25s;
+    }
+
+    .booking-type-btn.active {
+      background: rgba(76, 111, 255, 0.12);
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    .calendar-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--hairline);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .cal-day-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .cal-day-cell.booked {
+      background: rgba(76, 111, 255, 0.15);
+      border: 1px solid rgba(76, 111, 255, 0.25);
+    }
+
+    .cal-day-cell.booked-gold {
+      background: rgba(201, 168, 76, 0.15);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+    }
+
+    .cal-day-cell.booked-mint {
+      background: rgba(0, 212, 168, 0.15);
+      border: 1px solid rgba(0, 212, 168, 0.25);
+    }
+
+    .cal-d {
+      color: var(--ink-soft);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+    }
+
+    .cal-n {
+      font-weight: 700;
+      margin: 2px 0;
+    }
+
+    .cal-label {
+      font-size: 0.5rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    /* POS Sync Nodes Widget */
+    .pos-sync-vis {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .sync-nodes {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .sync-node {
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      text-align: center;
+      z-index: 2;
+      flex: 1;
+      max-width: 7.5rem;
+      transition: all 0.3s;
+    }
+
+    .sync-node.active-glow {
+      background: rgba(76, 111, 255, 0.12);
+      border-color: var(--brand);
+      box-shadow: 0 0 15px rgba(76, 111, 255, 0.25);
+    }
+
+    .sync-node-name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .sync-node-sub {
+      font-size: 0.5625rem;
+      color: var(--ink-soft);
+      margin-top: 1px;
+    }
+
+    .sync-connector {
+      flex-grow: 1;
+      height: 1.5px;
+      background: var(--hairline);
+      margin: 0 -5px;
+      z-index: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sync-connector.pulsing::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 30px;
+      background: linear-gradient(90deg, transparent, var(--brand-light), transparent);
+      animation: pulseSync 1s infinite linear;
+    }
+
+    @keyframes pulseSync {
+      0% {
+        left: -30px;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    .sync-receipt {
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      padding: 0.375rem 0;
+      border-bottom: 1px dashed var(--hairline);
+    }
+
+    .receipt-row.total {
+      border-bottom: none;
+      padding-top: 0.5rem;
+      font-weight: 700;
+      color: var(--brand-light);
+    }
+
+    /* Multi Vendor L1-L4 Stacking Layers */
+    .vendor-vis {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .vendor-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .v-layer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--hairline);
+      border-radius: 0.75rem;
+      transition: all 0.3s;
+    }
+
+    .v-layer.layer-active {
+      background: rgba(0, 212, 168, 0.08);
+      border-color: var(--brand-light);
+      transform: translateX(5px);
+    }
+
+    .vl-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--brand-light);
+      border-radius: 50%;
+    }
+
+    .vl-name {
+      font-size: 0.8125rem;
+      font-weight: 700;
+    }
+
+    .vl-desc {
+      font-size: 0.625rem;
+      color: var(--ink-soft);
+      margin-top: 1px;
+    }
+
+    .vl-tag {
+      margin-left: auto;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--ink-soft);
+    }
+
+    /* Comparison Table Section */
+    .comparison-section {
+      background: var(--background);
+      padding: 6rem 1.5rem;
+      z-index: 1;
+    }
+
+    @media (min-width: 640px) {
+      .comparison-section {
+        padding: 7rem 2.5rem;
+      }
+    }
+
+    .comparison-header {
+      text-align: center;
+      max-width: 48rem;
+      margin: 0 auto 4rem auto;
+    }
+
+    .comp-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-card);
+      background: rgba(13, 18, 38, 0.4);
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9375rem;
+      color: var(--ink);
+    }
+
+    .comp-table th,
+    .comp-table td {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--hairline);
+      vertical-align: middle;
+    }
+
+    .comp-table th {
+      font-weight: 600;
+      color: var(--ink-soft);
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .comp-table th.th-pixelgo {
+      background: rgba(76, 111, 255, 0.04);
+      color: #ffffff;
+      border-left: 1px solid rgba(76, 111, 255, 0.15);
+      border-right: 1px solid rgba(76, 111, 255, 0.15);
+    }
+
+    .comp-table td.comp-pg {
+      background: rgba(76, 111, 255, 0.02);
+      border-left: 1px solid rgba(76, 111, 255, 0.1);
+      border-right: 1px solid rgba(76, 111, 255, 0.1);
+    }
+
+    .comp-feature {
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+
+    .comp-sub {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+
+    .check-yes {
+      color: var(--brand-light);
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .check-no {
+      color: #ff6b8a;
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .check-partial {
+      color: var(--accent-gold);
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .comp-table tfoot .comp-btn-row-desktop td {
+      border-bottom: none;
+      padding: 1.5rem 1.25rem;
+    }
+
+    /* Mobile App Section */
+    .mobile-section {
+      background: var(--brand-deep);
+      border-radius: var(--radius-card-lg);
+      padding: 5rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      z-index: 1;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-section {
+        grid-template-columns: 1.1fr 1fr;
+        padding: 6rem 3.5rem;
+      }
+    }
+
+    .mobile-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .mobile-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .mobile-feats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .mobile-feats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mobile-feat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .mobile-feat-icon {
+      font-size: 1.5rem;
+    }
+
+    .mobile-feat-name {
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+
+    .mobile-feat-desc {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .mobile-right {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Mock Phone Frame */
+    .phone-frame {
+      width: 16.5rem;
+      height: 33.5rem;
+      border: 8px solid #232742;
+      border-radius: 2.25rem;
+      background: #000000;
+      position: relative;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 7rem;
+      height: 1rem;
+      background: #232742;
+      border-radius: 0 0 10px 10px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      padding: 1.25rem 0.75rem;
+      color: #ffffff;
+      font-family: system-ui, sans-serif;
+    }
+
+    .phone-screen-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .phone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding-top: 0.25rem;
+    }
+
+    .phone-logo {
+      color: var(--brand-light);
+    }
+
+    .phone-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.375rem;
+    }
+
+    .ph-metric {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    .ph-num {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .ph-lbl {
+      font-size: 0.5rem;
+      color: #a0a6b8;
+    }
+
+    .phone-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.375rem;
+    }
+
+    .ph-action {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      font-size: 0.5625rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ph-action-icon {
+      font-size: 0.75rem;
+    }
+
+    .phone-bookings {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .ph-book-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      padding: 0.375rem 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.5625rem;
+    }
+
+    .ph-book-name {
+      font-weight: 700;
+    }
+
+    .ph-book-sub {
+      color: #a0a6b8;
+      font-size: 0.5rem;
+      margin-top: 1px;
+    }
+
+    .ph-book-status {
+      font-size: 0.5rem;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .ph-book-status.status-in {
+      background: rgba(0, 212, 168, 0.15);
+      color: var(--brand-light);
+    }
+
+    .ph-book-status.status-pending {
+      background: rgba(76, 111, 255, 0.15);
+      color: var(--brand);
+    }
+
+    .ph-book-status.status-delayed {
+      background: rgba(255, 107, 138, 0.15);
+      color: #ff6b8a;
+    }
+
+    /* Testimonials Section */
+    .testimonials-section {
+      background: var(--background);
+      padding: 5rem 1.5rem;
+      z-index: 1;
+    }
+
+    @media (min-width: 640px) {
+      .testimonials-section {
+        padding: 6rem 2.5rem;
+      }
+    }
+
+    .testimonials-title {
+      font-size: 3rem;
+      font-weight: 500;
+      margin-top: 1rem;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-top: 3.5rem;
+      list-style: none;
+    }
+
+    @media (min-width: 768px) {
+      .testimonials-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .testimonial-card {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: transform 0.1s ease;
+      border: 1px solid var(--hairline);
+    }
+
+    .testimonial-quote-icon {
+      font-size: 2.25rem;
+      font-weight: 500;
+      color: var(--brand);
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-size: 1.125rem;
+      line-height: 1.5;
+      color: var(--ink);
+      margin-top: 1rem;
+      flex-grow: 1;
+    }
+
+    .testimonial-author {
+      border-top: 1px solid var(--hairline);
+      padding-top: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .author-name {
+      font-weight: 600;
+    }
+
+    .author-role {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+
+    /* Blog Section */
+    .blog-section {
+      background: var(--background);
+      padding: 5rem 1.5rem;
+      z-index: 1;
+    }
+
+    @media (min-width: 640px) {
+      .blog-section {
+        padding: 6rem 2.5rem;
+      }
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .blog-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .blog-card {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: all 0.3s;
+      border: 1px solid var(--hairline);
+    }
+
+    .blog-card:hover {
+      background: var(--surface-card);
+      border-color: var(--brand);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+
+    .blog-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .blog-tag {
+      background: rgba(76, 111, 255, 0.15);
+      color: var(--brand-light);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .blog-read-time {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+    }
+
+    .blog-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+    }
+
+    .blog-desc {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .blog-link {
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--brand-deep);
+      color: #ffffff;
+      border-radius: var(--radius-card-lg);
+      margin-top: 0.75rem;
+      padding: 3.5rem 1.5rem;
+      z-index: 1;
+    }
+
+    @media (min-width: 640px) {
+      footer {
+        padding: 4rem 2.5rem;
+      }
+    }
+
+    .footer-cta-band {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .footer-cta-band {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+
+    .footer-cta-title {
+      font-size: 3.75rem;
+      font-weight: 500;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+    }
+
+    .footer-grid {
+      padding: 3.5rem 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1.4fr repeat(4, 1fr);
+      }
+    }
+
+    .footer-brand-col {
+      max-width: 20rem;
+    }
+
+    .footer-blurb {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.6;
+      margin-top: 1rem;
+    }
+
+    .footer-nav-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .footer-nav-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .footer-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .footer-nav-list a {
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.2s;
+    }
+
+    .footer-nav-list a:hover {
+      color: #ffffff;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 2rem;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-badges {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .footer-badges img {
+      height: 1.75rem;
+      opacity: 0.5;
+    }
+
+    /* Modal Backdrop */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      align-items: flex-end;
+      padding: 0.75rem;
+      pointer-events: none;
+    }
+
+    @media (min-width: 640px) {
+      .modal-overlay {
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 11, 24, 0.85);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-panel {
+      position: relative;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: var(--surface);
+      border-radius: var(--radius-card-lg);
+      padding: 1.5rem;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+      z-index: 95;
+      transform: translateY(2rem) scale(0.96);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid var(--hairline);
+    }
+
+    @media (min-width: 640px) {
+      .modal-panel {
+        max-width: 32rem;
+        padding: 2.25rem;
+      }
+    }
+
+    .modal-overlay.active {
+      pointer-events: auto;
+    }
+
+    .modal-overlay.active .modal-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-overlay.active .modal-panel {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 2.25rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 0.75rem;
+    }
+
+    .modal-close {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      place-items: center;
+      transition: background-color 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .modal-close svg {
+      width: 1rem;
+      height: 1rem;
+      color: #ffffff;
+      transition: transform 0.1s ease;
+    }
+
+    .modal-form {
+      margin-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-soft);
+    }
+
+    .form-input {
+      width: 100%;
+      border-radius: 0.75rem;
+      border: 1px solid var(--hairline);
+      background: var(--surface);
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--brand);
+    }
+
+    .btn-submit {
+      border-radius: var(--radius-pill);
+      background: var(--brand);
+      color: #ffffff;
+      padding: 0.875rem 1.75rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background-color 0.3s;
+      width: fit-content;
+      margin-top: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      background: #3b5bdb;
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Fullscreen Menu Overlay (Mobile) */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      pointer-events: none;
+    }
+
+    .menu-backdrop {
+      position: absolute;
+      inset: 0;
+      background: var(--background);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .menu-panel {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      padding: 0.5rem;
+      z-index: 75;
+      opacity: 0;
+      transform: translateY(-2rem);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .menu-overlay.active {
+      pointer-events: auto;
+    }
+
+    .menu-overlay.active .menu-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .menu-overlay.active .menu-panel {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .menu-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-card-lg);
+      background: var(--surface);
+      border: 1px solid var(--hairline);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      color: #ffffff;
+      overflow-y: auto;
+    }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .menu-close {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      place-items: center;
+      transition: background-color 0.2s;
+    }
+
+    .menu-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .menu-close svg {
+      width: 1rem;
+      height: 1rem;
+      color: #ffffff;
+    }
+
+    .menu-nav {
+      margin: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .menu-link {
+      font-size: 2.5rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      transition: color 0.3s;
+      width: fit-content;
+    }
+
+    .menu-link:hover {
+      color: var(--brand-light);
+    }
+
+    .menu-footer {
+      border-top: 1px solid var(--hairline);
+      padding-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: auto;
+    }
+
+    /* Offcanvas Mega Menu Body Styles */
+    .menu-mega-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+
+    @media (min-width: 640px) {
+      .menu-mega-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    .menu-mega-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .menu-mega-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--brand-light);
+      padding-bottom: 0.625rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-mega-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.625rem 0.75rem;
+      border-radius: 0.625rem;
+      border: 1px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
+      color: var(--ink-soft);
+    }
+
+    .menu-mega-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    .menu-mega-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .menu-mega-name {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .menu-mega-desc {
+      font-size: 0.6875rem;
+      color: var(--ink-soft);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+
+    /* Mobile Modules Section Padding Override */
+    @media (max-width: 767px) {
+      .programs-section {
+        background: #080b18 !important;
+        padding: 20px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+
+      #modules>div {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+
+      #modules .modules-grid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        gap: 1rem !important;
+      }
+
+      #modules .module-card {
+        padding: 1.5rem 1.25rem !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+      }
+    }
+
+
+
+    /* ── MOBILE HEADING AND PADDING OVERRIDES ── */
+    @media (max-width: 767px) {
+
+      /* Force all major section titles and headers to 2.6rem */
+      .hero-title,
+      .dashboard-intro h2,
+      .clip-mask-wrapper,
+      .programs-title,
+      .stats-title,
+      .testimonials-title,
+      .footer-cta-title,
+      .problem-header h2,
+      .feature-content h2,
+      .mobile-content h2,
+      .comparison-header h2 {
+        font-size: 2.6rem !important;
+        line-height: 1.05 !important;
+      }
+
+      /* Force exactly 20px left and right padding on all section wrappers and header inner containers */
+      .dashboard-section,
+      .problem-section,
+      .programs-section,
+      .interactive-feature-section,
+      .mobile-section,
+      .comparison-section,
+      .testimonials-section,
+      .footer-cta-band,
+      .dashboard-intro,
+      .problem-header,
+      .feature-content,
+      .mobile-content,
+      .comparison-header {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+        max-width: 100% !important;
+      }
+    }
+
+
+    /* ── MOBILE ACCORDION AND IMPROVEMENTS OVERRIDES ── */
+    @media (max-width: 767px) {
+
+      /* Stats Section Padding Override */
+      #comparison.stats-section {
+        padding: 4rem 20px !important;
+      }
+
+      #comparison .stats-grid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+
+      #comparison .stat-card {
+        padding: 2rem 1rem !important;
+      }
+
+      /* Footer Accordion styling */
+      .footer-nav-col {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 1.25rem !important;
+        gap: 0 !important;
+      }
+
+      .footer-nav-col:last-of-type {
+        border-bottom: none;
+      }
+
+      .footer-nav-title {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        cursor: pointer !important;
+        padding: 0.75rem 0 !important;
+        user-select: none !important;
+        width: 100% !important;
+      }
+
+      .footer-nav-title::after {
+        content: "+";
+        font-size: 1.1rem;
+        font-weight: 300;
+        transition: transform 0.2s ease;
+        color: var(--brand-light, #ffd700);
+      }
+
+      .footer-nav-col.open .footer-nav-title::after {
+        content: "−";
+      }
+
+      .footer-nav-list {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.3s ease;
+        padding-top: 0;
+      }
+
+      .footer-nav-col.open .footer-nav-list {
+        max-height: 300px;
+        opacity: 1;
+        padding-top: 0.75rem;
+      }
+    }
+
+    /* Menu Link Font Sizes & Accordion Styles */
+    .menu-link,
+    .menu-accordion-trigger {
+      font-size: 1.6rem !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      line-height: 1.2 !important;
+      letter-spacing: -0.01em !important;
+      color: #ffffff !important;
+      text-decoration: none !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0.85rem 0 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+      cursor: pointer !important;
+      width: 100% !important;
+      user-select: none !important;
+    }
+
+    @media (min-width: 640px) {
+
+      .menu-link,
+      .menu-accordion-trigger {
+        font-size: 2.2rem !important;
+      }
+    }
+
+    .menu-accordion-item {
+      width: 100% !important;
+    }
+
+    .menu-accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-left: 0.75rem;
+    }
+
+    .menu-accordion-item.open .menu-accordion-content {
+      max-height: 350px;
+      opacity: 1;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .menu-child-link {
+      font-size: 1.15rem !important;
+      color: rgba(255, 255, 255, 0.7) !important;
+      text-decoration: none !important;
+      padding: 0.4rem 0 !important;
+      transition: color 0.2s !important;
+      font-weight: 400 !important;
+      display: block !important;
+    }
+
+    .menu-child-link:hover {
+      color: var(--brand-light, #ffd700) !important;
+    }
+
+    .menu-acc-icon {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s ease;
+    }
+
+
+    /* ==========================================================================
+       TABLET & DESKTOP SCALE-UP OVERRIDES (1024px+)
+       ========================================================================== */
+    @media (min-width: 1024px) {
+
+      /* Typography scale-up */
+      .eyebrow {
+        font-size: 0.85rem !important;
+        letter-spacing: 0.12em !important;
+      }
+
+      /* Dashboard Section scaling */
+      .dashboard-intro h2 {
+        font-size: 3.8rem !important;
+        margin-bottom: 2rem !important;
+      }
+
+      .dashboard-intro p {
+        font-size: 1rem !important;
+        line-height: 1.65 !important;
+        margin-bottom: 2.5rem !important;
+      }
+
+      .dashboard-mock {
+        max-width: 44rem !important;
+        /* Larger mock on desktop */
+        padding: 2rem !important;
+        border-radius: 1.25rem !important;
+      }
+
+      .mock-tab {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.8rem !important;
+      }
+
+      .mock-switcher {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.78rem !important;
+      }
+
+      .mock-metrics {
+        gap: 0.75rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+
+      .mock-metric {
+        padding: 1rem 0.75rem !important;
+        border-radius: 0.75rem !important;
+      }
+
+      .mock-metric-num {
+        font-size: 1.5rem !important;
+      }
+
+      .mock-metric-lbl {
+        font-size: 0.65rem !important;
+        margin-top: 0.375rem !important;
+      }
+
+      .mock-section-title {
+        font-size: 0.72rem !important;
+        margin-bottom: 0.75rem !important;
+      }
+
+      .mock-bookings {
+        padding: 1.25rem !important;
+        border-radius: 0.875rem !important;
+      }
+
+      .mock-row {
+        padding: 0.625rem 0 !important;
+      }
+
+      .mock-row-name {
+        font-size: 0.82rem !important;
+      }
+
+      .mock-row-sub {
+        font-size: 0.72rem !important;
+      }
+
+      .mock-tag {
+        font-size: 0.62rem !important;
+        padding: 3px 7px !important;
+      }
+
+      .mock-amount {
+        font-size: 0.82rem !important;
+      }
+
+      .mock-chart-box {
+        padding: 1.25rem !important;
+        border-radius: 0.875rem !important;
+      }
+
+      .mock-bars {
+        height: 100px !important;
+        gap: 0.5rem !important;
+      }
+
+      .mock-chart-labels {
+        margin-top: 0.625rem !important;
+        gap: 0.5rem !important;
+      }
+
+      .mock-chart-labels span {
+        font-size: 0.65rem !important;
+      }
+
+      .mock-status-row {
+        gap: 0.75rem !important;
+        margin-top: 1rem !important;
+      }
+
+      .mock-status {
+        padding: 0.75rem !important;
+        border-radius: 0.75rem !important;
+      }
+
+      .status-dot {
+        width: 0.5rem !important;
+        height: 0.5rem !important;
+      }
+
+      .mock-status-text {
+        font-size: 0.7rem !important;
+      }
+
+      .mock-status-text strong {
+        font-size: 0.78rem !important;
+      }
+
+      /* Problem Section scaling */
+      .problem-header h2 {
+        font-size: 4.2rem !important;
+      }
+
+      .problem-header p {
+        font-size: 1rem !important;
+      }
+
+      .bento-card {
+        height: 420px !important;
+        /* Taller bento cards */
+        padding: 2rem !important;
+      }
+
+      .bento-title {
+        font-size: 1.15rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+
+      .bento-desc {
+        font-size: 0.875rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+
+      /* Bento Visuals */
+      .bento-flow-row {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.82rem !important;
+      }
+
+      .bento-flow-arrow {
+        font-size: 1.1rem !important;
+      }
+
+      .bento-metric-val {
+        font-size: 2rem !important;
+      }
+
+      .bento-chart-bars {
+        height: 65px !important;
+      }
+
+      .bento-cal-grid {
+        gap: 0.5rem !important;
+        max-width: 14rem !important;
+      }
+
+      .bento-cal-cell {
+        font-size: 0.82rem !important;
+      }
+
+      .bento-cal-badge {
+        font-size: 0.55rem !important;
+        padding: 2px 4px !important;
+      }
+
+      .bento-aadhaar-card {
+        padding: 1.125rem !important;
+        max-width: 19rem !important;
+      }
+
+      .bento-aadhaar-header span {
+        font-size: 0.8rem !important;
+      }
+
+      .bento-aadhaar-body {
+        font-size: 0.72rem !important;
+        line-height: 1.5 !important;
+      }
+
+      .bento-kyc-step {
+        font-size: 0.82rem !important;
+        gap: 0.5rem !important;
+      }
+
+      .bento-task-row {
+        font-size: 0.78rem !important;
+        padding: 0.625rem 0.75rem !important;
+      }
+
+      .bento-task-dot {
+        width: 8px !important;
+        height: 8px !important;
+      }
+
+      /* Capabilities Feature Grid scaling */
+      .feature-content h2 {
+        font-size: 3.8rem !important;
+        margin-bottom: 2rem !important;
+      }
+
+      .feature-content p {
+        font-size: 1rem !important;
+        line-height: 1.65 !important;
+        margin-bottom: 2.5rem !important;
+      }
+
+      .feature-point-icon {
+        width: 3.2rem !important;
+        height: 3.2rem !important;
+        font-size: 1.35rem !important;
+        border-radius: 0.875rem !important;
+      }
+
+      .feature-point-text h4 {
+        font-size: 1.05rem !important;
+      }
+
+      .feature-point-text p {
+        font-size: 0.875rem !important;
+      }
+
+      /* Detailed Capability visual widgets */
+      .booking-engine-vis {
+        max-width: 34rem !important;
+        /* Larger visual card */
+        padding: 2rem !important;
+        border-radius: 1.25rem !important;
+      }
+
+      .booking-type-btn {
+        padding: 1.25rem 0.75rem !important;
+        border-radius: 1rem !important;
+      }
+
+      .bt-icon {
+        font-size: 1.75rem !important;
+      }
+
+      .bt-name {
+        font-size: 0.82rem !important;
+      }
+
+      .bt-desc {
+        font-size: 0.68rem !important;
+      }
+
+      .calendar-strip {
+        padding: 1.125rem !important;
+        border-radius: 1rem !important;
+        min-height: 7.5rem !important;
+      }
+
+      .cal-day-cell {
+        padding: 0.75rem 0.375rem !important;
+        border-radius: 0.75rem !important;
+      }
+
+      .cal-d {
+        font-size: 0.72rem !important;
+      }
+
+      .cal-n {
+        font-size: 1.05rem !important;
+      }
+
+      .cal-label {
+        font-size: 0.62rem !important;
+        margin-top: 6px !important;
+      }
+
+      /* POS Sync visual */
+      .pos-sync-vis {
+        max-width: 34rem !important;
+        padding: 2rem !important;
+        border-radius: 1.25rem !important;
+      }
+
+      .sync-node {
+        padding: 0.875rem 0.75rem !important;
+        border-radius: 1rem !important;
+      }
+
+      .sync-node-name {
+        font-size: 0.875rem !important;
+      }
+
+      .sync-node-sub {
+        font-size: 0.68rem !important;
+      }
+
+      .sync-receipt {
+        padding: 1.125rem !important;
+        border-radius: 1rem !important;
+      }
+
+      .receipt-row {
+        font-size: 0.875rem !important;
+        padding: 0.5rem 0 !important;
+      }
+
+      .receipt-row.total span:last-child {
+        font-size: 1.05rem !important;
+      }
+
+      .sync-badge {
+        font-size: 0.78rem !important;
+        padding: 6px 14px !important;
+      }
+
+      /* Multi-Vendor visual */
+      .vendor-vis {
+        max-width: 34rem !important;
+        padding: 2rem !important;
+        border-radius: 1.25rem !important;
+      }
+
+      .v-layer {
+        padding: 0.875rem 1.25rem !important;
+        border-radius: 1rem !important;
+      }
+
+      .vl-dot {
+        width: 10px !important;
+        height: 10px !important;
+      }
+
+      .vl-name {
+        font-size: 0.95rem !important;
+      }
+
+      .vl-desc {
+        font-size: 0.78rem !important;
+      }
+
+      .vl-tag {
+        font-size: 0.68rem !important;
+        padding: 3px 8px !important;
+      }
+
+      .biz-pill {
+        padding: 5px 12px !important;
+        font-size: 0.72rem !important;
+      }
+
+      /* Mobile App Section scaling */
+      .mobile-content h2 {
+        font-size: 3.8rem !important;
+        margin-bottom: 2rem !important;
+      }
+
+      .mobile-content p {
+        font-size: 1rem !important;
+        line-height: 1.65 !important;
+        margin-bottom: 2.5rem !important;
+      }
+
+      .mob-feat-card {
+        padding: 1.25rem 1.5rem !important;
+        border-radius: 1rem !important;
+      }
+
+      .mob-feat-card-icon {
+        font-size: 1.5rem !important;
+      }
+
+      .mob-feat-card-name {
+        font-size: 0.95rem !important;
+      }
+
+      .mob-feat-card-desc {
+        font-size: 0.78rem !important;
+      }
+
+      .phone-frame {
+        width: 300px !important;
+        /* Scale up phone frame */
+        padding: 20px 18px !important;
+        border-radius: 44px !important;
+      }
+
+      .phone-screen {
+        min-height: 480px !important;
+        border-radius: 26px !important;
+      }
+
+      /* Comparison Section scaling */
+      .comparison-header h2 {
+        font-size: 3.8rem !important;
+        margin-bottom: 2rem !important;
+      }
+
+      .comparison-header p {
+        font-size: 1rem !important;
+      }
+
+      .comp-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9375rem;
+        color: var(--ink);
+      }
+
+      .comp-table thead th {
+        font-size: 0.85rem !important;
+        padding: 1.25rem 1.75rem !important;
+      }
+
+      .comp-table td {
+        padding: 1.25rem 1.75rem !important;
+      }
+
+      .comp-feature {
+        font-size: 0.98rem !important;
+      }
+
+      .comp-sub {
+        font-size: 0.78rem !important;
+      }
+
+      .check-yes {
+        font-size: 1.2rem !important;
+      }
+
+      /* Modules grid spacing */
+      .module-card {
+        padding: 2.25rem !important;
+      }
+
+      .module-icon {
+        width: 3.8rem !important;
+        height: 3.8rem !important;
+        font-size: 1.6rem !important;
+        border-radius: 1rem !important;
+      }
+
+      .mod-name {
+        font-size: 1.35rem !important;
+      }
+
+      .mod-desc {
+        font-size: 0.875rem !important;
+      }
+
+      .mod-feat {
+        font-size: 0.8rem !important;
+      }
+    }
+
+    /* ==========================================================================
+       LARGE DESKTOP SCALE-UP OVERRIDES (1440px+)
+       ========================================================================== */
+    @media (min-width: 1440px) {
+
+      .dashboard-intro h2,
+      .feature-content h2,
+      .mobile-content h2,
+      .comparison-header h2 {
+        font-size: 4.6rem !important;
+      }
+
+      .problem-header h2 {
+        font-size: 5rem !important;
+      }
+
+      .dashboard-mock {
+        max-width: 50rem !important;
+        /* Even larger on wide screens */
+      }
+
+      .booking-engine-vis,
+      .pos-sync-vis,
+      .vendor-vis {
+        max-width: 38rem !important;
+      }
+
+      .phone-frame {
+        width: 340px !important;
+        padding: 22px 20px !important;
+      }
+
+      .phone-screen {
+        min-height: 550px !important;
+      }
+    }
+  </style>
+
+  <!-- Lenis importmap -->
+  <script type="importmap">
+  { "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm" } }
+  </script>
+</head>
+
+<body>
+
+  <!-- Curtain Preloader -->
+  <div class="loader-curtain" id="preloader">
+    <div class="loader-wordmark" id="loaderWordmark">
+      <img src="https://pixelgo.live/assets/images/logo_icon/logo.png" alt="PixelGo" class="logo-mark"
+        style="width: 32px; height: 32px;" />
+      <span>PixelGo</span>
+    </div>
+    <div class="loader-track">
+      <div class="loader-fill" id="loaderFill"></div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Menu Overlay (Mobile) -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+    <div class="menu-panel" id="menuPanel">
+      <div class="menu-inner">
+        <div class="menu-header">
+          <div class="menu-logo">
+            <img src="https://pixelgo.live/assets/images/logo_icon/logo.png" alt="PixelGo" class="logo-mark"
+              style="width: 24px; height: 24px;" />
+            <span>PixelGo</span>
+          </div>
+          <button class="menu-close" id="menuCloseBtn" aria-label="Close menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="menu-mega-body">
+          <!-- Solutions Column -->
+          <div class="menu-mega-col">
+            <span class="menu-mega-title">Core Modules</span>
+            <a href="#modules" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">🛎️</span>
+              <div>
+                <span class="menu-mega-name">Hotel PMS</span>
+                <p class="menu-mega-desc">Full hotel desk operations &amp; booking engine</p>
+              </div>
+            </a>
+            <a href="#modules" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">🍽️</span>
+              <div>
+                <span class="menu-mega-name">Restaurant POS</span>
+                <p class="menu-mega-desc">KOT &amp; table management</p>
+              </div>
+            </a>
+            <a href="#modules" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">🍸</span>
+              <div>
+                <span class="menu-mega-name">Bar Operations</span>
+                <p class="menu-mega-desc">Excise stock logging &amp; counter billing</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Specialty Column -->
+          <div class="menu-mega-col">
+            <span class="menu-mega-title">Specialty Modules</span>
+            <a href="#modules" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">🎪</span>
+              <div>
+                <span class="menu-mega-name">Banquet &amp; Events</span>
+                <p class="menu-mega-desc">BEO logs, event layouts &amp; catering</p>
+              </div>
+            </a>
+            <a href="#modules" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">🏖️</span>
+              <div>
+                <span class="menu-mega-name">Resort Operations</span>
+                <p class="menu-mega-desc">Activities scheduler &amp; zone billing</p>
+              </div>
+            </a>
+            <a href="#mobile" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">📱</span>
+              <div>
+                <span class="menu-mega-name">Flutter Mobile App</span>
+                <p class="menu-mega-desc">Manage ops from your phone</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Company Column -->
+          <div class="menu-mega-col">
+            <span class="menu-mega-title">Company</span>
+            <a href="#about" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">🏢</span>
+              <div><span class="menu-mega-name">About PixelGo</span></div>
+            </a>
+            <a href="#comparison" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">⚡</span>
+              <div><span class="menu-mega-name">Why PixelGo</span></div>
+            </a>
+            <a href="#testimonials" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">⭐</span>
+              <div><span class="menu-mega-name">Customer Reviews</span></div>
+            </a>
+            <a href="#partner" class="menu-mega-item js-menu-link">
+              <span class="menu-mega-icon">🤝</span>
+              <div><span class="menu-mega-name">Partner Program</span></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="menu-footer">
+          <button class="btn-pill variant-solid js-book-visit-btn">
+            <span>Register Business</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Business Modal -->
+  <div class="modal-overlay" id="contactModal" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-panel" id="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div id="modalFormContainer">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow tone-dark">Get Started</div>
+            <h2 class="modal-title" id="modalTitle">Register Your<br>Business</h2>
+          </div>
+          <button class="modal-close" id="modalCloseBtn" aria-label="Close modal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+
+        <form class="modal-form" id="visitForm" novalidate>
+          <div class="form-field">
+            <label class="form-label" for="userName">Full name</label>
+            <input class="form-input" type="text" id="userName" placeholder="Alex Rivera" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="userEmail">Email</label>
+            <input class="form-input" type="email" id="userEmail" placeholder="you@email.com" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="userHotelName">Hotel Name</label>
+            <input class="form-input" type="text" id="userHotelName" placeholder="Grand Residency" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="userMessage">Outlets & Modules needed</label>
+            <textarea class="form-input" id="userMessage" rows="2"
+              placeholder="e.g. 1 Hotel, 1 Restaurant, 1 Bar..."></textarea>
+          </div>
+          <button class="btn-submit" type="submit" id="submitBtn">Submit Request</button>
+        </form>
+      </div>
+
+      <!-- Success panel -->
+      <div id="modalSuccessContainer" style="display: none;">
+        <div class="success-panel">
+          <div class="success-check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 class="success-title">Registration received</h3>
+          <p class="success-desc">Thanks, <span id="successName">there</span> — our team will reach out to you within 30
+            minutes to set up your account.</p>
+          <button class="btn-pill variant-solid" id="successDoneBtn">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Website Shell -->
+  <main>
+
+    <!-- 1) Hero Section -->
+    <section class="hero-section">
+      <!-- Parallax Background -->
+      <div class="hero-bg" id="heroBg">
+        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80"
+          fetchpriority="high" alt="Luxury Hotel Lobby">
+      </div>
+
+      <!-- Site Header -->
+      <header
+        style="position: absolute; top: 0; left: 0; right: 0; z-index: 9999; display: flex; align-items: center; justify-content: space-between; padding: 24px;">
+        <!-- Logo (Left) -->
+        <a href="/" class="header-logo"
+          style="position: absolute; left: 24px; top: 24px; pointer-events: auto; display: block; text-decoration: none;">
+          <img src="https://pixelgo.live/assets/images/logo_icon/logo.png" alt="PixelGo"
+            style="display: block; height: 35px; width: auto;" />
+        </a>
+
+        <!-- Nav & Actions (Right) -->
+        <button class="burger-btn" id="burgerBtn" aria-label="Open menu"
+          style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </header>
+
+      <!-- Two-Column Hero Content Grid -->
+      <div class="hero-content-grid">
+        <!-- Hero Text -->
+        <div class="hero-left-side">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>India's First Unified Hospitality SaaS — V3</span>
+          </div>
+          <h1 class="hero-title" id="heroTitle">The Hotel Operating System</h1>
+          <p class="hero-sub">One platform managing Hotels, Restaurants, Bars, Resorts, and Banquets — with real-time
+            sync, Flutter mobile control, and zero revenue leakage.</p>
+          <div class="hero-btn-row">
+            <button class="btn-pill variant-solid js-book-visit-btn">Start Free Trial</button>
+            <button class="btn-pill variant-outline">Watch Demo →</button>
+          </div>
+        </div>
+
+        <!-- Hero Interactive Mock Dashboard -->
+        <div class="hero-right-side">
+          <div class="dashboard-mock">
+            <div class="mock-topbar">
+              <div class="mock-tabs">
+                <button class="mock-tab active" data-tab="hotel">Hotel Operations</button>
+                <button class="mock-tab" data-tab="restaurant">Restaurant POS</button>
+                <button class="mock-tab" data-tab="bar">Bar</button>
+              </div>
+              <div class="mock-switcher">
+                <span id="currentHotel">All Hotels</span> ▾
+              </div>
+            </div>
+
+            <div class="mock-metrics" id="heroMetrics">
+              <div class="mock-metric">
+                <span class="mock-metric-num m-blue">34</span>
+                <span class="mock-metric-lbl">Delayed<br>Checkout</span>
+              </div>
+              <div class="mock-metric">
+                <span class="mock-metric-num m-gold">30</span>
+                <span class="mock-metric-lbl">Pending<br>Check-In</span>
+              </div>
+              <div class="mock-metric">
+                <span class="mock-metric-num m-green">47</span>
+                <span class="mock-metric-lbl">Active<br>Bookings</span>
+              </div>
+              <div class="mock-metric">
+                <span class="mock-metric-num m-red">20</span>
+                <span class="mock-metric-lbl">Available<br>Rooms</span>
+              </div>
+            </div>
+
+            <div class="mock-grid" id="heroGrid">
+              <div class="mock-bookings">
+                <div class="mock-section-title">Active Bookings</div>
+                <div class="mock-row">
+                  <div>
+                    <div class="mock-row-name">Nitesh Sharma</div>
+                    <div class="mock-row-sub">Room 201 · Jan 18</div>
+                  </div>
+                  <div style="text-align:right">
+                    <span class="mock-tag tag-daily">Daily</span>
+                    <div class="mock-amount">₹1,121</div>
+                  </div>
+                </div>
+                <div class="mock-row">
+                  <div>
+                    <div class="mock-row-name">Ankit Verma</div>
+                    <div class="mock-row-sub">Suite A · Jan 20</div>
+                  </div>
+                  <div style="text-align:right">
+                    <span class="mock-tag tag-monthly">Monthly</span>
+                    <div class="mock-amount">₹19,057</div>
+                  </div>
+                </div>
+                <div class="mock-row">
+                  <div>
+                    <div class="mock-row-name">Priya Mehta</div>
+                    <div class="mock-row-sub">Room 105 · 14:00</div>
+                  </div>
+                  <div style="text-align:right">
+                    <span class="mock-tag tag-hourly">2h Hourly</span>
+                    <div class="mock-amount">₹446</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mock-chart-box">
+                <div class="mock-section-title">Revenue (INR)</div>
+                <div class="mock-bars">
+                  <div class="mock-bar bar-1"></div>
+                  <div class="mock-bar bar-2"></div>
+                  <div class="mock-bar bar-3"></div>
+                  <div class="mock-bar bar-4"></div>
+                  <div class="mock-bar bar-5"></div>
+                  <div class="mock-bar bar-6"></div>
+                </div>
+                <div class="mock-chart-labels">
+                  <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mock-status-row" id="heroStatus">
+              <div class="mock-status">
+                <div class="status-dot dot-green"></div>
+                <div class="mock-status-text"><strong>Restaurant POS</strong>3 live orders</div>
+              </div>
+              <div class="mock-status">
+                <div class="status-dot dot-blue"></div>
+                <div class="mock-status-text"><strong>Bar Operations</strong>Table 9 pending</div>
+              </div>
+              <div class="mock-status">
+                <div class="status-dot dot-gold"></div>
+                <div class="mock-status-text"><strong>Event BEO</strong>Hans Wedding</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Feature Marquee Section -->
+    <section class="marquee-section">
+      <div class="marquee-track">
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Daily / Hourly / Monthly Bookings</strong>
+            — One Engine, Three Models</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Real-Time POS Sync</strong> — F&B bills
+            auto-charge to room invoices</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Multi-Vendor SaaS</strong> — Complete data
+            isolation per properties</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Flutter Mobile App</strong> — Operations
+            managed on smartphone</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Banquet BEO</strong> — Create event
+            booking orders in seconds</span></div>
+        <!-- Duplicated for loop -->
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Daily / Hourly / Monthly Bookings</strong>
+            — One Engine, Three Models</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Real-Time POS Sync</strong> — F&B bills
+            auto-charge to room invoices</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Multi-Vendor SaaS</strong> — Complete data
+            isolation per properties</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Flutter Mobile App</strong> — Operations
+            managed on smartphone</span></div>
+        <div class="marquee-item"><span class="marq-dot"></span><span><strong>Banquet BEO</strong> — Create event
+            booking orders in seconds</span></div>
+      </div>
+    </section>
+
+    <!-- 3) Platform Stats Section -->
+    <section class="stats-section">
+      <div class="section-header-wrap">
+        <div>
+          <div class="eyebrow tone-dark">Platform Performance</div>
+          <h2 class="stats-title" id="statsTitle">Proven Metrics.<br>Real Impact.</h2>
+        </div>
+        <p class="stats-desc">Engineered to eliminate revenue leakage and sync operations across all hospitality
+          business models — backed by verifiable data from 500+ properties.</p>
+      </div>
+
+      <dl class="stats-grid">
+        <!-- Stat 1 -->
+        <div class="stat-cell reveal-inview">
+          <dt class="sr-only">Business Models Supported</dt>
+          <dd class="stat-val">5</dd>
+          <dd class="stat-lbl">Modules Supported</dd>
+          <dd class="stat-sub">Hotel · Restaurant · Bar · Resort · Banquet</dd>
+        </div>
+        <!-- Stat 2 -->
+        <div class="stat-cell reveal-inview" style="transition-delay: 110ms;">
+          <dt class="sr-only">Revenue Leakage Eliminated</dt>
+          <dd class="stat-val">25%</dd>
+          <dd class="stat-lbl">Leakage Eliminated</dd>
+          <dd class="stat-sub">Average across hotel clients on legacy tools</dd>
+        </div>
+        <!-- Stat 3 -->
+        <div class="stat-cell reveal-inview" style="transition-delay: 220ms;">
+          <dt class="sr-only">Real-Time Data Sync</dt>
+          <dd class="stat-val">100%</dd>
+          <dd class="stat-lbl">Real-Time Sync</dd>
+          <dd class="stat-sub">POS ↔ Room Invoice ↔ Analytics</dd>
+        </div>
+        <!-- Stat 4 -->
+        <div class="stat-cell reveal-inview" style="transition-delay: 330ms;">
+          <dt class="sr-only">Booking Type Support</dt>
+          <dd class="stat-val">3x</dd>
+          <dd class="stat-lbl">Booking Engines</dd>
+          <dd class="stat-sub">Daily · Hourly · Monthly in one core engine</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- 4) Brand Logo Carousel -->
+    <section class="brand-carousel-section">
+      <div class="brand-carousel-title">
+        Trusted by <span>500+ Indian Hotels, Resorts & Restaurants</span> Across 40+ Cities
+      </div>
+      <div class="brand-track-wrapper">
+        <div class="brand-logo-track">
+          <!-- Duplicated set for scroll -->
+          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Grand Palace</div>
+          <div class="brand-logo-card"><span class="bl-icon">🌴</span>Regency Resorts</div>
+          <div class="brand-logo-card"><span class="bl-icon">🍽️</span>Spice Table Café</div>
+          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Shiv Palace</div>
+          <div class="brand-logo-card"><span class="bl-icon">🎪</span>Royal Banquets</div>
+          <div class="brand-logo-card"><span class="bl-icon">🍺</span>The Heights Bar</div>
+
+          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Grand Palace</div>
+          <div class="brand-logo-card"><span class="bl-icon">🌴</span>Regency Resorts</div>
+          <div class="brand-logo-card"><span class="bl-icon">🍽️</span>Spice Table Café</div>
+          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Shiv Palace</div>
+          <div class="brand-logo-card"><span class="bl-icon">🎪</span>Royal Banquets</div>
+          <div class="brand-logo-card"><span class="bl-icon">🍺</span>The Heights Bar</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) Business Modules Section -->
+    <section class="modules-section" id="modules">
+      <div>
+        <div class="eyebrow tone-dark">Business Modules</div>
+        <h2 class="modules-title" id="modulesTitle">One Platform.<br>Five Worlds.</h2>
+      </div>
+
+      <ul class="modules-list">
+        <!-- Module 1 -->
+        <li>
+          <div class="module-row reveal-inview js-program-hover">
+            <span class="module-idx">01</span>
+            <div class="module-main">
+              <span class="module-name">Hotel &amp; Rooms</span>
+              <p class="module-desc">Full property management with triple booking engine, KYC, housekeeping, and car
+                parking.</p>
+            </div>
+            <div class="module-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </div>
+          </div>
+        </li>
+        <!-- Module 2 -->
+        <li>
+          <div class="module-row reveal-inview js-program-hover" style="transition-delay: 90ms;">
+            <span class="module-idx">02</span>
+            <div class="module-main">
+              <span class="module-name">Restaurant &amp; Café</span>
+              <p class="module-desc">Full POS with KOT, live kitchen orders, and room-charge sync — eliminating manual
+                billing entirely.</p>
+            </div>
+            <div class="module-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </div>
+          </div>
+        </li>
+        <!-- Module 3 -->
+        <li>
+          <div class="module-row reveal-inview js-program-hover" style="transition-delay: 180ms;">
+            <span class="module-idx">03</span>
+            <div class="module-main">
+              <span class="module-name">Bar &amp; Lounge</span>
+              <p class="module-desc">Liquor POS with alcohol category separation, variant sizes, and preloaded Indian
+                bar catalogue.</p>
+            </div>
+            <div class="module-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </div>
+          </div>
+        </li>
+        <!-- Module 4 -->
+        <li>
+          <div class="module-row reveal-inview js-program-hover" style="transition-delay: 270ms;">
+            <span class="module-idx">04</span>
+            <div class="module-main">
+              <span class="module-name">Banquet &amp; Events</span>
+              <p class="module-desc">Full BEO creation with venue management, package selection, and auto-generated
+                event invoices.</p>
+            </div>
+            <div class="module-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 6) Problem Section (The Fragmentation Trap) -->
+    <section class="problem-section">
+      <div class="problem-left">
+        <div class="eyebrow tone-dark">The Problem We Solve</div>
+        <h2 class="problem-title" id="problemTitle">The Fragmentation<br>Trap.</h2>
+        <p class="problem-desc">Indian hospitality businesses manage 4–5 separate tools — Excel for bookings, WhatsApp
+          for orders, a standalone POS, a separate accounting system. The result is 25% of profit quietly disappearing
+          between the cracks.</p>
+
+        <div class="problem-stat reveal-inview">
+          <span class="problem-stat-num">₹</span>
+          <span class="problem-stat-text"><strong>Real money is disappearing every month.</strong> Restaurant orders not
+            charged to rooms. Bar bills forgotten. PixelGo closes every one of these gaps.</span>
+        </div>
+      </div>
+
+      <div class="problem-right">
+        <!-- Pain Card 1 -->
+        <article class="pain-card pc-1 reveal-inview">
+          <span class="pain-icon">💸</span>
+          <div class="pain-body">
+            <h4>Revenue Leakage Between Departments</h4>
+            <p>Money disappears between restaurant POS and front desk. A guest orders food, it never gets added to their
+              room bill. Multiplied across 30 guests — it's significant daily loss.</p>
+          </div>
+        </article>
+
+        <!-- Pain Card 2 -->
+        <article class="pain-card pc-2 reveal-inview" style="transition-delay: 100ms;">
+          <span class="pain-icon">🕳️</span>
+          <div class="pain-body">
+            <h4>Zero Real-Time Visibility</h4>
+            <p>Owners ask "where am I losing money?" and get no answer. Legacy tools show total sales — not real profit,
+              not waste, not pilferage. Every decision is a guess.</p>
+          </div>
+        </article>
+
+        <!-- Pain Card 3 -->
+        <article class="pain-card pc-3 reveal-inview" style="transition-delay: 200ms;">
+          <span class="pain-icon">👤</span>
+          <div class="pain-body">
+            <h4>Dangerous Staff Dependency</h4>
+            <p>Operations collapse when a key staff member leaves. The process lives in people's heads — not in systems.
+              PixelGo embeds the process in software, not in individuals.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 7) Capabilities / Interactive Features -->
+    <section class="features-section" id="features">
+      <div class="features-header">
+        <div class="eyebrow tone-dark">Platform Capabilities</div>
+        <h2 class="features-section-title" id="featuresSectionTitle">Everything Your Hotel Needs.<br>Built From Scratch.
+        </h2>
+        <p class="features-section-desc">Unlike generic tools patched over decades, PixelGo is engineered specifically
+          for Indian hospitality with real-time sync, multi-vendor isolation, and triple-threat booking native to the
+          core engine.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1: Booking Engine -->
+        <div class="feature-item-row">
+          <div class="feature-content">
+            <span class="eyebrow tone-dark">Core Differentiator</span>
+            <h3 class="feature-title">Triple-Threat Booking Engine</h3>
+            <p class="feature-desc">Unlike competitors that patch hourly logic on top of daily-only code, PixelGo was
+              built from day one to handle all three booking modes natively in the same calendar — zero workarounds,
+              zero edge cases.</p>
+            <ul class="feat-points-list">
+              <li class="feat-point-row">
+                <span class="feat-point-icon-box">🗓️</span>
+                <div class="feat-point-text-box">
+                  <h4>Daily Booking</h4>
+                  <p>Standard check-in / checkout with auto-GST, full invoice, and guest portal access.</p>
+                </div>
+              </li>
+              <li class="feat-point-row">
+                <span class="feat-point-icon-box">⏱️</span>
+                <div class="feat-point-text-box">
+                  <h4>Hourly Booking</h4>
+                  <p>Grace buffers, auto-pricing, room readiness tracking. Captures transit guests — pure new revenue.
+                  </p>
+                </div>
+              </li>
+              <li class="feat-point-row">
+                <span class="feat-point-icon-box">📅</span>
+                <div class="feat-point-text-box">
+                  <h4>Monthly Booking</h4>
+                  <p>Long-stay logic for service apartments. Auto-rent cycles and monthly invoice generation built in.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="feature-visual">
+            <div class="booking-engine-vis">
+              <div class="booking-types">
+                <button class="booking-type-btn active" data-type="daily">Daily</button>
+                <button class="booking-type-btn" data-type="hourly">Hourly</button>
+                <button class="booking-type-btn" data-type="monthly">Monthly</button>
+              </div>
+              <div
+                style="font-size:0.625rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.1em;font-weight:600">
+                Smart Calendar View</div>
+              <div class="calendar-strip" id="calendarStrip">
+                <div class="cal-day-cell booked">
+                  <span class="cal-d">Mon</span><span class="cal-n">14</span><span class="cal-label">Daily</span>
+                </div>
+                <div class="cal-day-cell booked-gold">
+                  <span class="cal-d">Tue</span><span class="cal-n">15</span><span class="cal-label">2h Hourly</span>
+                </div>
+                <div class="cal-day-cell">
+                  <span class="cal-d">Wed</span><span class="cal-n">16</span>
+                </div>
+                <div class="cal-day-cell booked">
+                  <span class="cal-d">Thu</span><span class="cal-n">17</span><span class="cal-label">Daily</span>
+                </div>
+                <div class="cal-day-cell booked-mint">
+                  <span class="cal-d">Fri</span><span class="cal-n">18</span><span class="cal-label">Monthly</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2: POS Sync -->
+        <div class="feature-item-row reverse">
+          <div class="feature-content">
+            <span class="eyebrow tone-dark">Zero Revenue Leakage</span>
+            <h3 class="feature-title">POS ↔ Room Perfect Sync</h3>
+            <p class="feature-desc">The moment a guest orders food at the restaurant, the charge automatically appears
+              on their room invoice. Bar bills, room delivery, minibar — all flow to one final checkout bill. No manual
+              entry. No forgotten charges.</p>
+            <ul class="feat-points-list">
+              <li class="feat-point-row">
+                <span class="feat-point-icon-box">🔗</span>
+                <div class="feat-point-text-box">
+                  <h4>Real-Time Charge Push</h4>
+                  <p>Restaurant order → POS bill → Room invoice. Happens in milliseconds, not at checkout.</p>
+                </div>
+              </li>
+              <li class="feat-point-row">
+                <span class="feat-point-icon-box">🧾</span>
+                <div class="feat-point-text-box">
+                  <h4>Single Final Invoice</h4>
+                  <p>Guests see one clean bill: Room + Restaurant + Bar + Room Service.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="feature-visual">
+            <div class="pos-sync-vis">
+              <div
+                style="font-size:0.625rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.1em;font-weight:600">
+                Live Sync Flow</div>
+              <div class="sync-nodes">
+                <div class="sync-node" id="nodeRestaurant">
+                  <span class="sync-node-name">🍽️ Restaurant</span>
+                  <span class="sync-node-sub">Order placed</span>
+                </div>
+                <div class="sync-connector" id="connector1"></div>
+                <div class="sync-node" id="nodePOS">
+                  <span class="sync-node-name">⚡ POS</span>
+                  <span class="sync-node-sub">Bill created</span>
+                </div>
+                <div class="sync-connector" id="connector2"></div>
+                <div class="sync-node" id="nodeRoom">
+                  <span class="sync-node-name">🏨 Room</span>
+                  <span class="sync-node-sub">Auto-charged</span>
+                </div>
+              </div>
+
+              <div class="sync-receipt">
+                <div
+                  style="font-size:0.625rem;color:var(--ink-soft);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:600">
+                  Room Invoice — Room 201</div>
+                <div class="receipt-row"><span>Room charges (2 nights)</span><span>₹2,242</span></div>
+                <div class="receipt-row" id="receiptFood" style="display:none"><span>Restaurant — Dinner Naan &
+                    Curry</span><span>₹425</span></div>
+                <div class="receipt-row" id="receiptDrink" style="display:none"><span>Bar — Premium Mocktails
+                    x2</span><span>₹400</span></div>
+                <div class="receipt-row"><span>GST (12%)</span><span>₹269</span></div>
+                <div class="receipt-row total"><span>Total Due</span><span id="receiptTotal">₹2,511</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3: Multi-Vendor -->
+        <div class="feature-item-row">
+          <div class="feature-content">
+            <span class="eyebrow tone-dark">Platform Architecture</span>
+            <h3 class="feature-title">Multi-Vendor. Infinitely Scalable.</h3>
+            <p class="feature-desc">PixelGo is a true multi-tenant SaaS. Each vendor gets a completely isolated
+              workspace — their own data, staff, inventory, websites, and analytics. No cross-contamination. No shared
+              credentials.</p>
+            <ul class="feat-points-list">
+              <li class="feat-point-row">
+                <span class="feat-point-icon-box">🏢</span>
+                <div class="feat-point-text-box">
+                  <h4>Isolated Vendor Workspaces</h4>
+                  <p>Hotel A staff can never see Hotel B data. 100% data isolation enforced at L1.</p>
+                </div>
+              </li>
+              <li class="feat-point-row">
+                <span class="feat-point-icon-box">🌐</span>
+                <div class="feat-point-text-box">
+                  <h4>White-Label Guest Portals</h4>
+                  <p>Each vendor gets booking.theirhotelname.com — their logo, their brand.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="feature-visual">
+            <div class="vendor-vis">
+              <div
+                style="font-size:0.625rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.1em;font-weight:600">
+                Platform Architecture Layers</div>
+              <div class="vendor-layers">
+                <div class="v-layer" id="layerSuper">
+                  <div class="vl-dot"></div>
+                  <div>
+                    <div class="vl-name">Super Admin</div>
+                    <div class="vl-desc">Platform owner control & aggregate analytics</div>
+                  </div>
+                  <div class="vl-tag">L1</div>
+                </div>
+                <div class="v-layer" id="layerVendor">
+                  <div class="vl-dot"></div>
+                  <div>
+                    <div class="vl-name">Vendor Admin</div>
+                    <div class="vl-desc">Hotel owner — isolated workspace, all outlets</div>
+                  </div>
+                  <div class="vl-tag">L2</div>
+                </div>
+                <div class="v-layer" id="layerModule">
+                  <div class="vl-dot"></div>
+                  <div>
+                    <div class="vl-name">Business Modules</div>
+                    <div class="vl-desc">PMS / POS / Bar / Resort / Banquet</div>
+                  </div>
+                  <div class="vl-tag">L3</div>
+                </div>
+                <div class="v-layer" id="layerStaff">
+                  <div class="vl-dot"></div>
+                  <div>
+                    <div class="vl-name">Staff & Reception</div>
+                    <div class="vl-desc">Role-based limited access duties</div>
+                  </div>
+                  <div class="vl-tag">L4</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8) Comparison Section -->
+    <section class="comparison-section" id="comparison">
+      <div class="comparison-header">
+        <div class="eyebrow tone-dark">Why Operators Switch</div>
+        <h2 class="features-section-title">Legacy tools vs. PixelGo HMS</h2>
+        <p class="features-section-desc">eZee and Hotelogix were built 15 years ago for daily bookings only. They patch
+          new features on old foundations. PixelGo was designed from scratch for how Indian hospitality actually works.
+        </p>
+      </div>
+
+      <div class="comp-table-wrap reveal-inview">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>eZee / Hotelogix</th>
+              <th>Little Hotelier</th>
+              <th class="th-pixelgo">PixelGo HMS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="comp-feature">Daily / Hourly / Monthly Booking</div>
+                <div class="comp-sub">Native in one core engine</div>
+              </td>
+              <td class="check-partial">~</td>
+              <td class="check-no">✗</td>
+              <td class="comp-pg check-yes">✓</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="comp-feature">Native Restaurant POS</div>
+                <div class="comp-sub">KOT + room bills sync</div>
+              </td>
+              <td class="check-no">✗</td>
+              <td class="check-no">✗</td>
+              <td class="comp-pg check-yes">✓</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="comp-feature">Bar / Liquor Operations</div>
+                <div class="comp-sub">Liquor inventory + POS</div>
+              </td>
+              <td class="check-no">✗</td>
+              <td class="check-no">✗</td>
+              <td class="comp-pg check-yes">✓</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="comp-feature">Banquet &amp; Events BEO</div>
+                <div class="comp-sub">Venue blocker, packages, decoration pricing</div>
+              </td>
+              <td class="check-partial">~</td>
+              <td class="check-no">✗</td>
+              <td class="comp-pg check-yes">✓</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="comp-feature">Multi-Vendor SaaS</div>
+                <div class="comp-sub">Isolated vendor workspace & domain white-labeling</div>
+              </td>
+              <td class="check-no">✗</td>
+              <td class="check-no">✗</td>
+              <td class="comp-pg check-yes">✓</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="comp-feature">Flutter Mobile App</div>
+                <div class="comp-sub">Full system control on your smartphone</div>
+              </td>
+              <td class="check-no">✗</td>
+              <td class="check-partial">~</td>
+              <td class="comp-pg check-yes">✓</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="comp-btn-row-desktop">
+              <td style="border:none; background:transparent;"></td>
+              <td style="border:none; background:transparent;"></td>
+              <td style="border:none; background:transparent;"></td>
+              <td class="comp-pg" style="text-align:center;">
+                <button class="btn-pill variant-solid js-book-visit-btn" style="white-space: nowrap;">Register
+                  Business</button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- 9) Mobile App Section -->
+    <section class="mobile-section" id="mobile">
+      <div class="mobile-left">
+        <div class="eyebrow tone-light">Flutter Mobile App</div>
+        <h2 class="mobile-title">Your Hotel in<br>Your Pocket</h2>
+        <p class="features-section-desc">The PixelGo Flutter app brings full hotel operations to your smartphone. Not
+          just a dashboard — real actions: take bookings, manage POS, check staff attendance, and track live analytics
+          from anywhere.</p>
+
+        <div class="mobile-feats-grid">
+          <div class="mobile-feat-box">
+            <span class="mobile-feat-icon">📊</span>
+            <span class="mobile-feat-name">Live Dashboard</span>
+            <p class="mobile-feat-desc">Real-time occupancy, revenue, and booking counts at a glance</p>
+          </div>
+          <div class="mobile-feat-box">
+            <span class="mobile-feat-icon">🛎️</span>
+            <span class="mobile-feat-name">Booking Engine</span>
+            <p class="mobile-feat-desc">Create, edit, and check-in guests directly from the app</p>
+          </div>
+          <div class="mobile-feat-box">
+            <span class="mobile-feat-icon">🍽️</span>
+            <span class="mobile-feat-name">POS Operations</span>
+            <p class="mobile-feat-desc">Place orders, print KOT via Bluetooth, and manage payments</p>
+          </div>
+          <div class="mobile-feat-box">
+            <span class="mobile-feat-icon">📈</span>
+            <span class="mobile-feat-name">Analytics &amp; Reports</span>
+            <p class="mobile-feat-desc">Revenue trends, occupancy rates, and staff performance metrics</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-right">
+        <!-- Phone mock frame -->
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" id="phoneAppScreen">
+            <div class="phone-screen-content" id="phoneAppContent">
+              <div class="phone-header">
+                <div class="phone-logo">PixelGo</div>
+                <div class="phone-notif">🔔</div>
+              </div>
+              <div class="phone-metrics">
+                <div class="ph-metric">
+                  <div class="ph-num" style="color:var(--brand)">47</div>
+                  <div class="ph-lbl">Active Stays</div>
+                </div>
+                <div class="ph-metric">
+                  <div class="ph-num" style="color:var(--brand-light)">20</div>
+                  <div class="ph-lbl">Available</div>
+                </div>
+                <div class="ph-metric">
+                  <div class="ph-num" style="color:var(--accent-gold)">₹3.2L</div>
+                  <div class="ph-lbl">Month Revenue</div>
+                </div>
+                <div class="ph-metric">
+                  <div class="ph-num" style="color:#ff6b8a">34</div>
+                  <div class="ph-lbl">Delayed CO</div>
+                </div>
+              </div>
+              <div class="phone-actions">
+                <div class="ph-action" style="border:1px solid rgba(76,111,255,0.3);background:rgba(76,111,255,0.1)">
+                  <span class="ph-action-icon">📋</span>Book Room</div>
+                <div class="ph-action"><span class="ph-action-icon">🍽️</span>POS</div>
+              </div>
+              <div
+                style="font-size:0.55rem;color:var(--ink-soft);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.08em;font-weight:600">
+                Recent Bookings</div>
+              <div class="phone-bookings">
+                <div class="ph-book-row">
+                  <div>
+                    <div class="ph-book-name">Nitesh S.</div>
+                    <div class="ph-book-sub">Room 201 · Daily</div>
+                  </div>
+                  <span class="ph-book-status status-in">Checked In</span>
+                </div>
+                <div class="ph-book-row">
+                  <div>
+                    <div class="ph-book-name">Ankit V.</div>
+                    <div class="ph-book-sub">Suite A · Monthly</div>
+                  </div>
+                  <span class="ph-book-status status-pending">Pending CI</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10) Testimonials Section -->
+    <section class="testimonials-section" id="testimonials">
+      <div>
+        <div class="eyebrow tone-dark">What players say</div>
+        <h2 class="testimonials-title" id="testimonialsTitle">Loved by the<br>Locker Room</h2>
+      </div>
+
+      <ul class="testimonials-grid">
+        <!-- Testimonial 1 -->
+        <li class="reveal-inview">
+          <figure class="testimonial-card js-hover-lift">
+            <span class="testimonial-quote-icon">"</span>
+            <blockquote class="testimonial-text">We switched from eZee six months ago. The difference is night and day —
+              our restaurant revenue is now fully captured on every room bill. We recovered ₹40,000 in the first month
+              alone.</blockquote>
+            <figcaption class="testimonial-author">
+              <div class="author-name">Hans Ojha</div>
+              <div class="author-role">Owner, HRG Hospitality Group, Raipur</div>
+            </figcaption>
+          </figure>
+        </li>
+
+        <!-- Testimonial 2 -->
+        <li class="reveal-inview" style="transition-delay: 120ms;">
+          <figure class="testimonial-card js-hover-lift">
+            <span class="testimonial-quote-icon">"</span>
+            <blockquote class="testimonial-text">We run a hotel, a restaurant, and a banquet hall. Before PixelGo we had
+              three different systems. Now everything is one screen. Banquet invoices, food orders, room bills — all in
+              one place.</blockquote>
+            <figcaption class="testimonial-author">
+              <div class="author-name">Rajesh Sharma</div>
+              <div class="author-role">GM, The Grand Residency, Nagpur</div>
+            </figcaption>
+          </figure>
+        </li>
+
+        <!-- Testimonial 3 -->
+        <li class="reveal-inview" style="transition-delay: 240ms;">
+          <figure class="testimonial-card js-hover-lift">
+            <span class="testimonial-quote-icon">"</span>
+            <blockquote class="testimonial-text">The hourly booking feature alone pays for the subscription. We get
+              transit guests and couples that we were turning away before. The grace buffer is something no other HMS in
+              India offers natively.</blockquote>
+            <figcaption class="testimonial-author">
+              <div class="author-name">Pankaj Kumar</div>
+              <div class="author-role">Owner, Shiv Palace Hotels, Indore</div>
+            </figcaption>
+          </figure>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 11) Blog Section -->
+    <section class="blog-section" id="blog">
+      <div>
+        <div class="eyebrow tone-dark">Insights &amp; Engineering</div>
+        <h2 class="testimonials-title">Hospitality Playbooks<br>&amp; Tech Notes</h2>
+      </div>
+
+      <div class="blog-grid">
+        <!-- Blog 1 -->
+        <div class="blog-card reveal-inview">
+          <div class="blog-meta">
+            <span class="blog-tag">Operations</span>
+            <span class="blog-read-time">5 min read</span>
+          </div>
+          <h3 class="blog-title">Why Hourly Bookings Are the Hidden Profit Center of Indian Hotels</h3>
+          <p class="blog-desc">How smart grace buffers, automated cleaning readiness alerts, and dynamic hourly pricing
+            increase room revenue by 35% without adding overhead.</p>
+          <a href="#playbook" class="blog-link">Read Playbook →</a>
+        </div>
+        <!-- Blog 2 -->
+        <div class="blog-card reveal-inview" style="transition-delay: 120ms;">
+          <div class="blog-meta">
+            <span class="blog-tag" style="background:rgba(0,212,168,0.15);color:var(--brand-light)">Tech
+              Architecture</span>
+            <span class="blog-read-time">7 min read</span>
+          </div>
+          <h3 class="blog-title">Eliminating Revenue Leakage: POS to Room Charge Real-Time Sync</h3>
+          <p class="blog-desc">A technical breakdown of how our event-driven architecture pushes restaurant KOT and bar
+            charges directly to master room invoices in milliseconds.</p>
+          <a href="#playbook" class="blog-link">Read Tech Note →</a>
+        </div>
+        <!-- Blog 3 -->
+        <div class="blog-card reveal-inview" style="transition-delay: 240ms;">
+          <div class="blog-meta">
+            <span class="blog-tag" style="background:rgba(201,168,76,0.15);color:var(--accent-gold)">Case Study</span>
+            <span class="blog-read-time">4 min read</span>
+          </div>
+          <h3 class="blog-title">From 3 Fragmented Systems to 1 Unified Dashboard: A GM's Journey</h3>
+          <p class="blog-desc">Discover how a 45-room multi-outlet hotel in Raipur saved 20+ staff hours weekly and
+            recovered ₹40,000 in unbilled restaurant orders during their first 30 days.</p>
+          <a href="#playbook" class="blog-link">Read Case Study →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12) Footer -->
+    <footer id="contact">
+      <div class="footer-cta-band">
+        <div>
+          <div class="eyebrow tone-light">Get started today</div>
+          <p class="footer-cta-title" id="footerCtaTitle">Ready to play?</p>
+        </div>
+        <button class="btn-pill variant-light js-book-visit-btn reveal-inview" style="transition-delay: 150ms;">
+          <span>Register Business</span>
+          <svg class="js-hover-svg-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-grid">
+        <!-- Brand column -->
+        <div class="footer-brand-col">
+          <div class="footer-logo">
+            <img src="https://pixelgo.live/assets/images/logo_icon/logo.png" alt="PixelGo" class="logo-mark"
+              style="width: 24px; height: 24px;" />
+            <span>PixelGo</span>
+          </div>
+          <p class="footer-blurb">Turn your PMS into an intelligent growth engine. Designed from scratch for modern
+            Indian hospitality properties.</p>
+        </div>
+
+        <!-- Links column 1 -->
+        <div class="footer-nav-col">
+          <span class="footer-nav-title">Product</span>
+          <ul class="footer-nav-list">
+            <li><a href="#modules">Hotel Management</a></li>
+            <li><a href="#modules">Restaurant POS</a></li>
+            <li><a href="#modules">Bar System</a></li>
+            <li><a href="#modules">Banquet &amp; Events</a></li>
+            <li><a href="#modules">Resort Management</a></li>
+            <li><a href="#mobile">Mobile App</a></li>
+          </ul>
+        </div>
+
+        <!-- Links column 2 -->
+        <div class="footer-nav-col">
+          <span class="footer-nav-title">Company</span>
+          <ul class="footer-nav-list">
+            <li><a href="#about">About PixelGo</a></li>
+            <li><a href="#mission">Our Mission</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#partner">Partner Program</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Links column 3 -->
+        <div class="footer-nav-col">
+          <span class="footer-nav-title">Get Started</span>
+          <ul class="footer-nav-list">
+            <li><a href="#register" class="js-book-visit-btn">Register Business</a></li>
+            <li><a href="#login">Business Login</a></li>
+            <li><a href="#partner">Reseller Register</a></li>
+            <li><a href="#partner">Reseller Login</a></li>
+          </ul>
+        </div>
+
+        <!-- Links column 4 -->
+        <div class="footer-nav-col">
+          <span class="footer-nav-title">Partner Integrations</span>
+          <ul class="footer-nav-list font-light" style="color: rgba(255,255,255,0.4)">
+            <li>Platform Integrations</li>
+            <li>Ambassador Program</li>
+            <li>PixelGo Horizon</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap: 1rem; align-items:center;">
+          <span>© 2026 PixelGo. All Rights Reserved.</span>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="#terms">Terms of Service</a> |
+            <a href="#privacy">Privacy Policy</a> |
+            <a href="#security">Data Security</a> |
+            <a href="#cookie">Cookie Policy</a>
+          </div>
+        </div>
+        <p style="color: rgba(255,255,255,0.3); line-height: 1.4; margin-top: 1rem;">
+          PixelGo is an independent hospitality software developer. PixelGo partners with many brands, but makes no
+          claims upon their trademarks. All trademarks contained herein belong to their respective owners and
+          registrations.
+        </p>
+
+        <div class="footer-badges">
+          <!-- Award PCI SSL Mock Badges using inline SVG or descriptive CSS -->
+          <span
+            style="border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px 8px; color: var(--brand-light); font-weight:700;">PCI
+            COMPLIANT</span>
+          <span
+            style="border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px 8px; color: var(--accent-gold); font-weight:700;">SSL
+            SECURED</span>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Interactive Logic script using Lenis modules -->
+  <script type="module">
+    import Lenis from 'lenis';
+
+    const html = document.documentElement;
+    const preloader = document.getElementById('preloader');
+    const loaderWordmark = document.getElementById('loaderWordmark');
+    const loaderFill = document.getElementById('loaderFill');
+
+    // ── ROOT SCALE UP ──
+    const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
+    function updateScale() {
+      const innerWidth = window.innerWidth;
+      const reduction = ((BASE_W - innerWidth) / BASE_W) * 100 * COEF;
+      const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+      if (size > FONT_BASE) {
+        html.style.fontSize = size + "px";
+      } else {
+        html.style.removeProperty("font-size");
+      }
+    }
+    window.addEventListener("resize", updateScale);
+    updateScale();
+
+    // ── SMOOTH SCROLL INIT ──
+    const lenis = new Lenis({
+      smoothWheel: true
+    });
+
+    function raf(t) {
+      lenis.raf(t);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    window.scrollTo(0, 0);
+
+    // Lock & Unlock scrolling helper
+    function lockScroll() {
+      lenis.stop();
+      html.classList.add('scroll-locked');
+    }
+    function unlockScroll() {
+      lenis.start();
+      html.classList.remove('scroll-locked');
+    }
+    lockScroll(); // Locked for preloader initially
+
+    // ── SIMPLE SPRING ENGINE ──
+    class SpringSolver {
+      constructor() {
+        this.springs = [];
+        this.lastTime = performance.now();
+        this.tick = this.tick.bind(this);
+        requestAnimationFrame(this.tick);
+      }
+
+      animate(id, target, tension = 170, friction = 26, onUpdate) {
+        let s = this.springs.find(item => item.id === id);
+        if (!s) {
+          s = { id, x: 0, v: 0, target, tension, friction, onUpdate };
+          this.springs.push(s);
+        } else {
+          s.target = target;
+          s.tension = tension;
+          s.friction = friction;
+          s.onUpdate = onUpdate;
+        }
+      }
+
+      setStart(id, val) {
+        let s = this.springs.find(item => item.id === id);
+        if (s) {
+          s.x = val;
+        } else {
+          this.springs.push({ id, x: val, v: 0, target: val, tension: 170, friction: 26, onUpdate: () => { } });
+        }
+      }
+
+      tick(time) {
+        const dt = Math.min((time - this.lastTime) / 1000, 0.1);
+        this.lastTime = time;
+
+        for (let i = this.springs.length - 1; i >= 0; i--) {
+          const s = this.springs[i];
+          const force = -s.tension * (s.x - s.target) - s.friction * s.v;
+          s.v += force * dt;
+          s.x += s.v * dt;
+
+          if (s.onUpdate) s.onUpdate(s.x);
+
+          if (Math.abs(s.x - s.target) < 0.001 && Math.abs(s.v) < 0.001) {
+            s.x = s.target;
+            s.v = 0;
+            if (s.onUpdate) s.onUpdate(s.x);
+            this.springs.splice(i, 1);
+          }
+        }
+        requestAnimationFrame(this.tick);
+      }
+    }
+    const springs = new SpringSolver();
+
+    // ── TEXT REVEAL HELPER (CLIP MASK & STAGGER) ──
+    function revealWords(container, wordsText, duration = 1100, delayBase = 0, staggerOffset = 140) {
+      container.innerHTML = '';
+      const words = wordsText.split(' ');
+      words.forEach((word, idx) => {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'clip-mask-wrapper';
+
+        const inner = document.createElement('span');
+        inner.className = 'clip-mask-inner';
+        inner.textContent = word + (idx === words.length - 1 ? '' : ' ');
+        inner.style.transitionDuration = `${duration}ms`;
+        inner.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+        wrapper.appendChild(inner);
+        container.appendChild(wrapper);
+
+        setTimeout(() => {
+          inner.classList.add('revealed');
+        }, delayBase + (idx * staggerOffset));
+      });
+    }
+
+    function revealLines(container, linesArray, duration = 900, delayBase = 350, staggerOffset = 110) {
+      container.innerHTML = '';
+      linesArray.forEach((lineText, idx) => {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'clip-mask-wrapper';
+        wrapper.style.display = 'block';
+
+        const inner = document.createElement('span');
+        inner.className = 'clip-mask-inner';
+        inner.textContent = lineText;
+        inner.style.transitionDuration = `${duration}ms`;
+        inner.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+        wrapper.appendChild(inner);
+        container.appendChild(wrapper);
+
+        setTimeout(() => {
+          inner.classList.add('revealed');
+        }, delayBase + (idx * staggerOffset));
+      });
+    }
+
+    // ── INVIEW OBSERVER ──
+    const inviewObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          inviewObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal-inview').forEach(el => {
+      inviewObserver.observe(el);
+    });
+
+    // Special Trigger for Title Reveals on sections
+    const titleObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          if (id === 'modulesTitle') {
+            revealLines(entry.target, ["One Platform.", "Five Worlds."], 950, 0, 120);
+          } else if (id === 'problemTitle') {
+            revealLines(entry.target, ["The Fragmentation", "Trap."], 950, 0, 120);
+          } else if (id === 'featuresSectionTitle') {
+            revealLines(entry.target, ["Everything Your Hotel Needs.", "Built From Scratch."], 950, 0, 120);
+          } else if (id === 'statsTitle') {
+            revealLines(entry.target, ["Proven Metrics.", "Real Impact."], 950, 0, 120);
+          } else if (id === 'testimonialsTitle') {
+            revealLines(entry.target, ["Loved by the", "Locker Room"], 950, 0, 120);
+          } else if (id === 'footerCtaTitle') {
+            revealLines(entry.target, ["Ready to", "unify?"], 950, 0, 120);
+          }
+          titleObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    ['modulesTitle', 'problemTitle', 'featuresSectionTitle', 'statsTitle', 'testimonialsTitle', 'footerCtaTitle'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) titleObserver.observe(el);
+    });
+
+    // ── PARALLAX LOGIC ──
+    const heroBg = document.getElementById('heroBg');
+    lenis.on('scroll', (e) => {
+      // Hero Parallax background plate (0% -> 12% shift)
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const progress = Math.min(scrollY / windowHeight, 1);
+      if (heroBg) {
+        heroBg.style.transform = `translateY(${progress * 12}%)`;
+      }
+    });
+
+    // ── LOADER ANIMATION TIMER ──
+    const MIN_VISIBLE_MS = 1400;
+    const MAX_VISIBLE_MS = 2600;
+    const EXIT_MS = 850;
+    const startLoaderTime = performance.now();
+
+    // Stagger wordmark text
+    setTimeout(() => {
+      loaderWordmark.style.transition = 'opacity 0.7s, transform 0.7s';
+      loaderWordmark.style.opacity = '1';
+      loaderWordmark.style.transform = 'translateY(0)';
+    }, 100);
+
+    // Progress bar fill (0 to 1)
+    setTimeout(() => {
+      loaderFill.style.transition = 'transform 1.28s cubic-bezier(0.645, 0.045, 0.355, 1)';
+      loaderFill.style.transform = 'scaleX(1)';
+    }, 120);
+
+    function startReveal() {
+      // Exit curtain preloader
+      preloader.style.transition = 'transform 0.85s cubic-bezier(0.76, 0, 0.24, 1)';
+      preloader.style.transform = 'translateY(-105%)';
+
+      unlockScroll();
+
+      // Animate Hero text elements in
+      setTimeout(() => {
+        revealWords(document.getElementById('heroTitle'), "The Hotel Operating System", 1100, 0, 140);
+      }, 300);
+
+      // Remove curtain from DOM after transition completes
+      setTimeout(() => {
+        preloader.remove();
+      }, EXIT_MS + 200);
+    }
+
+    // Force loader finish if window loaded or timeout hit
+    window.addEventListener('load', () => {
+      const elapsed = performance.now() - startLoaderTime;
+      const delay = Math.max(MIN_VISIBLE_MS - elapsed, 0);
+      setTimeout(startReveal, delay);
+    });
+
+    // Safety fallback
+    setTimeout(() => {
+      if (document.getElementById('preloader')) {
+        startReveal();
+      }
+    }, MAX_VISIBLE_MS);
+
+
+    // ── HERO OUTLETS / MOCK DATA SWITCHER ──
+    const hotelData = {
+      all: {
+        metrics: [34, 30, 47, 20],
+        bookings: [
+          { name: "Nitesh Sharma", sub: "Room 201 · Daily", tag: "Daily", amt: "₹1,121", tagClass: "tag-daily" },
+          { name: "Ankit Verma", sub: "Suite A · Monthly", tag: "Monthly", amt: "₹19,057", tagClass: "tag-monthly" },
+          { name: "Priya Mehta", sub: "Room 105 · 14:00", tag: "2h Hourly", amt: "₹446", tagClass: "tag-hourly" }
+        ],
+        chart: [40, 60, 80, 50, 75, 90],
+        status: [
+          { dot: "dot-green", label: "Restaurant POS", sub: "3 live orders" },
+          { dot: "dot-blue", label: "Bar Operations", sub: "Table 9 pending" },
+          { dot: "dot-gold", label: "Event BEO", sub: "Hans Wedding" }
+        ]
+      },
+      regency: {
+        metrics: [12, 8, 22, 10],
+        bookings: [
+          { name: "Rajesh Sharma", sub: "Suite A · Daily", tag: "Daily", amt: "₹2,500", tagClass: "tag-daily" },
+          { name: "Hans Ojha", sub: "Room 102 · Daily", tag: "Daily", amt: "₹1,800", tagClass: "tag-daily" },
+          { name: "Vikram Aditya", sub: "Room 203 · Monthly", tag: "Monthly", amt: "₹22,000", tagClass: "tag-monthly" }
+        ],
+        chart: [30, 50, 70, 45, 60, 80],
+        status: [
+          { dot: "dot-green", label: "Laundry", sub: "2 baskets pending" },
+          { dot: "dot-blue", label: "Room Service", sub: "Room 102 KOT" },
+          { dot: "dot-gold", label: "Banquets", sub: "Ready for Evening" }
+        ]
+      },
+      palace: {
+        metrics: [15, 14, 16, 6],
+        bookings: [
+          { name: "Pankaj Kumar", sub: "Room 205 · Monthly", tag: "Monthly", amt: "₹15,000", tagClass: "tag-monthly" },
+          { name: "Priya Mehta", sub: "Room 101 · 15:00", tag: "3h Hourly", amt: "₹500", tagClass: "tag-hourly" },
+          { name: "Neeraj Soni", sub: "Room 103 · Daily", tag: "Daily", amt: "₹1,200", tagClass: "tag-daily" }
+        ],
+        chart: [20, 35, 50, 60, 40, 55],
+        status: [
+          { dot: "dot-green", label: "Bar Sync", sub: "Excise compliant" },
+          { dot: "dot-blue", label: "Main Gate", sub: "Camera online" },
+          { dot: "dot-gold", label: "Staff Duty", sub: "Night shift assigned" }
+        ]
+      }
+    };
+
+    const tabButtons = document.querySelectorAll('.mock-tab');
+    const hotelSwitcher = document.querySelector('.mock-switcher');
+    const switcherLabel = document.getElementById('currentHotel');
+    let selectedHotel = 'all';
+
+    // Dropdown list creation for switcher
+    const switcherDropdown = document.createElement('div');
+    switcherDropdown.className = 'header-standard-dropdown';
+    switcherDropdown.style.top = '100%';
+    switcherDropdown.style.left = '0';
+    switcherDropdown.style.width = '10rem';
+    switcherDropdown.style.padding = '0.5rem';
+    switcherDropdown.innerHTML = `
+      <a href="javascript:void(0)" class="dropdown-link-item" data-val="all">All Hotels</a>
+      <a href="javascript:void(0)" class="dropdown-link-item" data-val="regency">Grand Regency</a>
+      <a href="javascript:void(0)" class="dropdown-link-item" data-val="palace">Shiv Palace</a>
+    `;
+    hotelSwitcher.appendChild(switcherDropdown);
+
+    hotelSwitcher.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switcherDropdown.style.opacity = switcherDropdown.style.opacity === '1' ? '0' : '1';
+      switcherDropdown.style.visibility = switcherDropdown.style.visibility === 'visible' ? 'hidden' : 'visible';
+      switcherDropdown.style.transform = switcherDropdown.style.transform === 'translateY(0px)' ? 'translateY(1rem)' : 'translateY(0px)';
+    });
+
+    document.addEventListener('click', () => {
+      switcherDropdown.style.opacity = '0';
+      switcherDropdown.style.visibility = 'hidden';
+      switcherDropdown.style.transform = 'translateY(1rem)';
+    });
+
+    switcherDropdown.querySelectorAll('.dropdown-link-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        const val = item.getAttribute('data-val');
+        switcherLabel.textContent = item.textContent;
+        selectedHotel = val;
+        updateMockDashboard();
+      });
+    });
+
+    function updateMockDashboard() {
+      const data = hotelData[selectedHotel];
+
+      // Update metrics
+      const metricNums = document.querySelectorAll('.mock-metric-num');
+      metricNums[0].textContent = data.metrics[0];
+      metricNums[1].textContent = data.metrics[1];
+      metricNums[2].textContent = data.metrics[2];
+      metricNums[3].textContent = data.metrics[3];
+
+      // Update bookings
+      const bookingsBox = document.querySelector('.mock-bookings');
+      bookingsBox.innerHTML = `<div class="mock-section-title">Active Bookings</div>`;
+      data.bookings.forEach(b => {
+        const row = document.createElement('div');
+        row.className = 'mock-row';
+        row.innerHTML = `
+          <div>
+            <div class="mock-row-name">${b.name}</div>
+            <div class="mock-row-sub">${b.sub}</div>
+          </div>
+          <div style="text-align:right">
+            <span class="mock-tag ${b.tagClass}">${b.tag}</span>
+            <div class="mock-amount" style="margin-top:3px">${b.amt}</div>
+          </div>
+        `;
+        bookingsBox.appendChild(row);
+      });
+
+      // Update chart bars
+      const bars = document.querySelectorAll('.mock-bars .mock-bar');
+      bars.forEach((bar, i) => {
+        bar.style.height = `${data.chart[i]}%`;
+      });
+
+      // Update status row
+      const statusBox = document.getElementById('heroStatus');
+      statusBox.innerHTML = '';
+      data.status.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'mock-status';
+        div.innerHTML = `
+          <div class="status-dot ${s.dot}"></div>
+          <div class="mock-status-text"><strong>${s.label}</strong>${s.sub}</div>
+        `;
+        statusBox.appendChild(div);
+      });
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.getAttribute('data-tab');
+        if (tab === 'restaurant') {
+          selectedHotel = 'regency';
+        } else if (tab === 'bar') {
+          selectedHotel = 'palace';
+        } else {
+          selectedHotel = 'all';
+        }
+        switcherLabel.textContent = selectedHotel === 'all' ? 'All Hotels' : (selectedHotel === 'regency' ? 'Grand Regency' : 'Shiv Palace');
+        updateMockDashboard();
+      });
+    });
+
+
+    // ── SMART CALENDAR MODULE SELECTOR ──
+    const calendarDaysData = {
+      daily: `
+        <div class="cal-day-cell booked"><span class="cal-d">Mon</span><span class="cal-n">14</span><span class="cal-label">Daily</span></div>
+        <div class="cal-day-cell"><span class="cal-d">Tue</span><span class="cal-n">15</span></div>
+        <div class="cal-day-cell"><span class="cal-d">Wed</span><span class="cal-n">16</span></div>
+        <div class="cal-day-cell booked"><span class="cal-d">Thu</span><span class="cal-n">17</span><span class="cal-label">Daily</span></div>
+        <div class="cal-day-cell booked"><span class="cal-d">Fri</span><span class="cal-n">18</span><span class="cal-label">Daily</span></div>
+      `,
+      hourly: `
+        <div class="cal-day-cell booked-gold"><span class="cal-d">Mon</span><span class="cal-n">14</span><span class="cal-label">2h Slot</span></div>
+        <div class="cal-day-cell booked-gold"><span class="cal-d">Tue</span><span class="cal-n">15</span><span class="cal-label">4h Slot</span></div>
+        <div class="cal-day-cell"><span class="cal-d">Wed</span><span class="cal-n">16</span></div>
+        <div class="cal-day-cell"><span class="cal-d">Thu</span><span class="cal-n">17</span></div>
+        <div class="cal-day-cell booked-gold"><span class="cal-d">Fri</span><span class="cal-n">18</span><span class="cal-label">3h Slot</span></div>
+      `,
+      monthly: `
+        <div class="cal-day-cell booked-mint"><span class="cal-d">Mon</span><span class="cal-n">14</span><span class="cal-label">Monthly</span></div>
+        <div class="cal-day-cell booked-mint"><span class="cal-d">Tue</span><span class="cal-n">15</span><span class="cal-label">Monthly</span></div>
+        <div class="cal-day-cell booked-mint"><span class="cal-d">Wed</span><span class="cal-n">16</span><span class="cal-label">Monthly</span></div>
+        <div class="cal-day-cell booked-mint"><span class="cal-d">Thu</span><span class="cal-n">17</span><span class="cal-label">Monthly</span></div>
+        <div class="cal-day-cell booked-mint"><span class="cal-d">Fri</span><span class="cal-n">18</span><span class="cal-label">Monthly</span></div>
+      `
+    };
+
+    const calendarBtnRow = document.querySelectorAll('.booking-type-btn');
+    const calendarStrip = document.getElementById('calendarStrip');
+
+    calendarBtnRow.forEach(btn => {
+      btn.addEventListener('click', () => {
+        calendarBtnRow.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const type = btn.getAttribute('data-type');
+        calendarStrip.style.opacity = 0;
+        setTimeout(() => {
+          calendarStrip.innerHTML = calendarDaysData[type];
+          calendarStrip.style.opacity = 1;
+        }, 200);
+      });
+    });
+
+
+    // ── POS SYNC REAL-TIME VISUAL LOOP ──
+    const receiptTotal = document.getElementById('receiptTotal');
+    const receiptFood = document.getElementById('receiptFood');
+    const receiptDrink = document.getElementById('receiptDrink');
+
+    const nodeRest = document.getElementById('nodeRestaurant');
+    const nodePos = document.getElementById('nodePOS');
+    const nodeRoom = document.getElementById('nodeRoom');
+
+    const conn1 = document.getElementById('connector1');
+    const conn2 = document.getElementById('connector2');
+
+    let syncStep = 0;
+
+    function runSyncVisualAnimation() {
+      if (syncStep === 0) {
+        receiptFood.style.display = 'none';
+        receiptDrink.style.display = 'none';
+        receiptTotal.textContent = '₹2,511';
+
+        nodeRest.classList.remove('active-glow');
+        nodePos.classList.remove('active-glow');
+        nodeRoom.classList.remove('active-glow');
+        conn1.classList.remove('pulsing');
+        conn2.classList.remove('pulsing');
+
+        setTimeout(() => nodeRest.classList.add('active-glow'), 100);
+        syncStep = 1;
+      } else if (syncStep === 1) {
+        conn1.classList.add('pulsing');
+        setTimeout(() => nodePos.classList.add('active-glow'), 800);
+        syncStep = 2;
+      } else if (syncStep === 2) {
+        conn2.classList.add('pulsing');
+        setTimeout(() => {
+          nodeRoom.classList.add('active-glow');
+          receiptFood.style.display = 'flex';
+          receiptDrink.style.display = 'flex';
+          animatePrice(2511, 3336, 800);
+        }, 800);
+        syncStep = 3;
+      } else {
+        syncStep = 0;
+      }
+    }
+
+    function animatePrice(start, end, duration) {
+      let startTime = null;
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const value = Math.floor(progress * (end - start) + start);
+        receiptTotal.textContent = '₹' + value.toLocaleString();
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      }
+      window.requestAnimationFrame(step);
+    }
+
+    setInterval(runSyncVisualAnimation, 3000);
+    runSyncVisualAnimation();
+
+
+    // ── MULTI-VENDOR ARCHITECTURE HIGHLIGHTER ──
+    let activeLayerIdx = 0;
+    const layers = ['layerSuper', 'layerVendor', 'layerModule', 'layerStaff'];
+
+    function rotateLayerHighlight() {
+      layers.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('layer-active');
+      });
+
+      const activeEl = document.getElementById(layers[activeLayerIdx]);
+      if (activeEl) activeEl.classList.add('layer-active');
+
+      activeLayerIdx = (activeLayerIdx + 1) % layers.length;
+    }
+
+    setInterval(rotateLayerHighlight, 3000);
+    rotateLayerHighlight();
+
+
+    // ── FLUTTER MOBILE APP LOOP ──
+    const phoneScreenStates = [
+      `
+      <div class="phone-screen-content" id="phoneAppContent">
+        <div class="phone-header">
+          <div class="phone-logo">PixelGo</div>
+          <div class="phone-notif">🔔</div>
+        </div>
+        <div class="phone-metrics">
+          <div class="ph-metric"><div class="ph-num" style="color:var(--brand)">47</div><div class="ph-lbl">Active Stays</div></div>
+          <div class="ph-metric"><div class="ph-num" style="color:var(--brand-light)">20</div><div class="ph-lbl">Available</div></div>
+          <div class="ph-metric"><div class="ph-num" style="color:var(--accent-gold)">₹3.2L</div><div class="ph-lbl">Month Revenue</div></div>
+          <div class="ph-metric"><div class="ph-num" style="color:#ff6b8a">34</div><div class="ph-lbl">Delayed CO</div></div>
+        </div>
+        <div class="phone-actions">
+          <div class="ph-action" style="border:1px solid rgba(76,111,255,0.3);background:rgba(76,111,255,0.1)"><span class="ph-action-icon">📋</span>Book Room</div>
+          <div class="ph-action"><span class="ph-action-icon">🍽️</span>POS</div>
+        </div>
+        <div style="font-size:0.55rem;color:var(--ink-soft);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.08em;font-weight:600">Recent Bookings</div>
+        <div class="phone-bookings">
+          <div class="ph-book-row">
+            <div><div class="ph-book-name">Nitesh S.</div><div class="ph-book-sub">Room 201 · Daily</div></div>
+            <span class="ph-book-status status-in">Checked In</span>
+          </div>
+          <div class="ph-book-row">
+            <div><div class="ph-book-name">Ankit V.</div><div class="ph-book-sub">Suite A · Monthly</div></div>
+            <span class="ph-book-status status-pending">Pending CI</span>
+          </div>
+        </div>
+      </div>
+      `,
+      `
+      <div class="phone-screen-content" id="phoneAppContent">
+        <div class="phone-header" style="border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:6px;margin-bottom:8px">
+          <div class="phone-logo" style="color:#fff;font-size:0.75rem">← Check In Guest</div>
+          <div style="font-size:0.6rem;color:var(--brand-light)">Step 2 of 2</div>
+        </div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px;margin-top:4px">
+          <div>
+            <label style="font-size:0.5rem;color:var(--ink-soft);display:block;margin-bottom:2px">GUEST NAME</label>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:6px 8px;font-size:0.65rem;color:#fff;font-weight:600">Hans Ojha</div>
+          </div>
+          <div>
+            <label style="font-size:0.5rem;color:var(--ink-soft);display:block;margin-bottom:2px">ASSIGNED ROOM</label>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:6px 8px;font-size:0.65rem;color:#fff;display:flex;justify-content:space-between;align-items:center">
+              <span>Room 102 (Deluxe)</span>
+              <span style="color:var(--brand-light);font-size:0.55rem">● Clean</span>
+            </div>
+          </div>
+          <button style="background:var(--brand-light);color:#080b18;border:none;border-radius:8px;padding:8px;font-size:0.65rem;font-weight:700;margin-top:auto;cursor:pointer;box-shadow:0 4px 10px rgba(0,212,168,0.25)">✓ Confirm Check-In</button>
+        </div>
+      </div>
+      `,
+      `
+      <div class="phone-screen-content" id="phoneAppContent">
+        <div class="phone-header" style="border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:6px;margin-bottom:8px">
+          <div class="phone-logo" style="color:#fff;font-size:0.75rem">← Restaurant POS</div>
+          <div style="font-size:0.6rem;color:var(--accent-gold)">Table 5</div>
+        </div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px;margin-top:4px">
+          <div style="font-size:0.55rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.08em">Ordered Items</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#fff">
+              <span>Butter Chicken x1</span>
+              <span>₹425</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#fff">
+              <span>Garlic Naan x3</span>
+              <span>₹120</span>
+            </div>
+            <div style="border-top:1px dashed rgba(255,255,255,0.1);padding-top:6px;margin-top:2px;display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:var(--brand-light)">
+              <span>Total Bill</span>
+              <span>₹545</span>
+            </div>
+          </div>
+          <button style="background:var(--brand);color:#fff;border:none;border-radius:8px;padding:8px;font-size:0.65rem;font-weight:700;margin-top:auto;cursor:pointer;box-shadow:0 4px 10px rgba(76,111,255,0.25)">⚡ Push to Room Invoice</button>
+        </div>
+      </div>
+      `
+    ];
+
+    let phoneStateIdx = 0;
+    function rotatePhoneScreen() {
+      const screen = document.getElementById('phoneAppScreen');
+      if (!screen) return;
+      const content = screen.querySelector('.phone-screen-content');
+      if (!content) return;
+
+      content.style.opacity = 0;
+      content.style.transform = 'translateX(-15px)';
+      content.style.transition = 'opacity 0.25s, transform 0.25s';
+
+      setTimeout(() => {
+        phoneStateIdx = (phoneStateIdx + 1) % phoneScreenStates.length;
+        screen.innerHTML = phoneScreenStates[phoneStateIdx];
+
+        const newContent = screen.querySelector('.phone-screen-content');
+        newContent.style.opacity = 0;
+        newContent.style.transform = 'translateX(15px)';
+
+        newContent.offsetHeight;
+
+        newContent.style.transition = 'opacity 0.25s, transform 0.25s';
+        newContent.style.opacity = 1;
+        newContent.style.transform = 'translateX(0)';
+      }, 250);
+    }
+
+    // Auto loop screen rotate
+    setInterval(rotatePhoneScreen, 4000);
+
+    // ── BENTO WIDGET ANIMATIONS ──
+    let leakState = 0;
+    const leakFlowPOS = document.getElementById('leakFlowPOS');
+    const leakFlowRoom = document.getElementById('leakFlowRoom');
+    const leakFlowStatus = document.getElementById('leakFlowStatus');
+
+    function animateBentoLeakage() {
+      if (!leakFlowPOS || !leakFlowRoom || !leakFlowStatus) return;
+      if (leakState === 0) {
+        leakFlowPOS.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        leakFlowRoom.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        leakFlowStatus.textContent = 'Not Charged ✗';
+        leakFlowStatus.style.color = '#ef4444';
+        leakState = 1;
+      } else {
+        leakFlowPOS.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        leakFlowRoom.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        leakFlowStatus.textContent = 'Auto Synced ✓';
+        leakFlowStatus.style.color = '#10b981';
+        leakState = 0;
+      }
+    }
+    setInterval(animateBentoLeakage, 3000);
+
+    let bentoMetricBase = 47230;
+    const bentoMetricVal = document.getElementById('bentoMetricVal');
+
+    function animateBentoVisibility() {
+      if (!bentoMetricVal) return;
+      const delta = Math.floor((Math.random() - 0.4) * 800);
+      bentoMetricBase += delta;
+      bentoMetricVal.textContent = '₹' + bentoMetricBase.toLocaleString();
+
+      const bentoBars = document.querySelectorAll('#bentoChartBars .bento-chart-bar');
+      bentoBars.forEach(bar => {
+        const newHeight = Math.floor(Math.random() * 70) + 20;
+        bar.style.height = newHeight + '%';
+      });
+    }
+    setInterval(animateBentoVisibility, 2000);
+
+    let calState = 0;
+    const bentoCalCell = document.querySelector('#bentoCalGrid div:nth-child(2)');
+    const bentoCalBadge = document.getElementById('bentoCalBadge');
+
+    function animateBentoCalendar() {
+      if (!bentoCalCell || !bentoCalBadge) return;
+      if (calState === 0) {
+        bentoCalCell.style.borderColor = '#ef4444';
+        bentoCalBadge.className = 'bento-cal-badge bento-badge-warn';
+        bentoCalBadge.textContent = 'Overlap';
+        calState = 1;
+      } else {
+        bentoCalCell.style.borderColor = '#10b981';
+        bentoCalBadge.className = 'bento-cal-badge bento-badge-ok';
+        bentoCalBadge.textContent = 'Resolved';
+        calState = 0;
+      }
+    }
+    setInterval(animateBentoCalendar, 2500);
+
+    let kycStep = 0;
+    const kycStep2 = document.getElementById('kycStep2');
+    const kycStep3 = document.getElementById('kycStep3');
+
+    function animateBentoKYC() {
+      if (!kycStep2 || !kycStep3) return;
+      if (kycStep === 0) {
+        kycStep2.className = 'bento-kyc-step';
+        kycStep3.className = 'bento-kyc-step';
+        kycStep2.classList.remove('checked');
+        kycStep3.classList.remove('checked');
+        kycStep = 1;
+      } else if (kycStep === 1) {
+        kycStep2.className = 'bento-kyc-step checked active';
+        kycStep = 2;
+      } else {
+        kycStep3.className = 'bento-kyc-step checked active';
+        kycStep = 0;
+      }
+    }
+    setInterval(animateBentoKYC, 2000);
+
+    let bentoTaskState = 0;
+    const taskDot = document.getElementById('taskDotHousekeep');
+    const taskText = document.getElementById('taskTextHousekeep');
+
+    function animateBentoTasks() {
+      if (!taskDot || !taskText) return;
+      if (bentoTaskState === 0) {
+        taskDot.style.background = '#ef4444';
+        taskDot.style.boxShadow = '0 0 6px #ef4444';
+        taskText.textContent = 'Assign Clean (Delayed 24m)';
+        taskText.style.color = '#ef4444';
+        bentoTaskState = 1;
+      } else {
+        taskDot.style.background = '#10b981';
+        taskDot.style.boxShadow = '0 0 6px #10b981';
+        taskText.textContent = 'Housekeeping Cleaned ✓';
+        taskText.style.color = '#10b981';
+        bentoTaskState = 0;
+      }
+    }
+    setInterval(animateBentoTasks, 3000);
+
+
+
+    // ── MICROMOTION HOVERS (SPRING ENGINE) ──
+    const isMobile = window.innerWidth <= 768;
+
+    if (!isMobile) {
+      // 1. Program Row hovers (Nudges arrow to x=8, opacity=1)
+      document.querySelectorAll('.js-program-hover').forEach((row, i) => {
+        const arrowSvg = row.querySelector('.module-arrow svg');
+        row.addEventListener('mouseenter', () => {
+          springs.animate(`prog-arrow-x-${i}`, 8, 300, 20, (x) => {
+            arrowSvg.style.transform = `translateX(${x}px)`;
+          });
+          springs.animate(`prog-arrow-op-${i}`, 1, 300, 20, (op) => {
+            arrowSvg.style.opacity = op;
+          });
+        });
+        row.addEventListener('mouseleave', () => {
+          springs.animate(`prog-arrow-x-${i}`, 0, 300, 20, (x) => {
+            arrowSvg.style.transform = `translateX(${x}px)`;
+          });
+          springs.animate(`prog-arrow-op-${i}`, 0.65, 300, 20, (op) => {
+            arrowSvg.style.opacity = op;
+          });
+        });
+      });
+
+      // 2. Button Arrow hovers (nudge x=5)
+      document.querySelectorAll('.btn-pill').forEach((btn, i) => {
+        const arrowSvg = btn.querySelector('.js-hover-svg-arrow');
+        if (arrowSvg) {
+          btn.addEventListener('mouseenter', () => {
+            springs.animate(`btn-arrow-${i}`, 5, 320, 20, (x) => {
+              arrowSvg.style.transform = `translateX(${x}px)`;
+            });
+          });
+          btn.addEventListener('mouseleave', () => {
+            springs.animate(`btn-arrow-${i}`, 0, 320, 20, (x) => {
+              arrowSvg.style.transform = `translateX(${x}px)`;
+            });
+          });
+        }
+      });
+
+      // 3. Testimonial Card lifts (lifts y=0 -> -8)
+      document.querySelectorAll('.js-hover-lift').forEach((card, i) => {
+        card.addEventListener('mouseenter', () => {
+          springs.animate(`test-lift-${i}`, -8, 300, 22, (y) => {
+            card.style.transform = `translateY(${y}px)`;
+          });
+        });
+        card.addEventListener('mouseleave', () => {
+          springs.animate(`test-lift-${i}`, 0, 300, 22, (y) => {
+            card.style.transform = `translateY(${y}px)`;
+          });
+        });
+      });
+    }
+
+
+    // ── FULLSCREEN BURGER MENU (MOBILE) ──
+    const burgerBtn = document.getElementById('burgerBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const menuCloseBtn = document.getElementById('menuCloseBtn');
+    const menuPanel = document.getElementById('menuPanel');
+    const menuBackdrop = document.getElementById('menuBackdrop');
+    const menuLinks = document.querySelectorAll('.js-menu-link');
+
+    function openMenu() {
+      menuOverlay.classList.add('active');
+      menuOverlay.setAttribute('aria-hidden', 'false');
+      lockScroll();
+
+      // Animate panel spring from top
+      springs.setStart('menu-panel-y', -24);
+      springs.animate('menu-panel-y', 0, 220, 28, (y) => {
+        menuPanel.style.transform = `translateY(${y}px)`;
+      });
+
+      // Stagger menu links
+      menuLinks.forEach((link, idx) => {
+        link.style.opacity = 0;
+        link.style.transform = 'translateY(28px)';
+        setTimeout(() => {
+          link.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+          link.style.opacity = 1;
+          link.style.transform = 'translateY(0)';
+        }, 120 + (idx * 70));
+      });
+    }
+
+    function closeMenu() {
+      menuOverlay.classList.remove('active');
+      menuOverlay.setAttribute('aria-hidden', 'true');
+      unlockScroll();
+    }
+
+    burgerBtn.addEventListener('click', openMenu);
+    menuCloseBtn.addEventListener('click', closeMenu);
+    menuBackdrop.addEventListener('click', closeMenu);
+
+    menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        closeMenu();
+        const targetId = link.getAttribute('href');
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          lenis.scrollTo(targetEl);
+        }
+      });
+    });
+
+
+    // ── CONTACT MODAL LOGIC ──
+    const modalOverlay = document.getElementById('contactModal');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalPanel = document.getElementById('modalPanel');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const visitForm = document.getElementById('visitForm');
+    const userNameInput = document.getElementById('userName');
+    const submitBtn = document.getElementById('submitBtn');
+    const formContainer = document.getElementById('modalFormContainer');
+    const successContainer = document.getElementById('modalSuccessContainer');
+    const successNameSpan = document.getElementById('successName');
+    const successDoneBtn = document.getElementById('successDoneBtn');
+
+    // Trigger Book a Visit Modal on buttons
+    document.querySelectorAll('.js-book-visit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // If coming from menu, close menu first
+        if (menuOverlay.classList.contains('active')) {
+          closeMenu();
+        }
+        openModal();
+      });
+    });
+
+    function openModal() {
+      modalOverlay.classList.add('active');
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      lockScroll();
+
+      // Reset visual form states
+      formContainer.style.display = 'block';
+      successContainer.style.display = 'none';
+      visitForm.reset();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Request";
+
+      // Focus name field after short delay
+      setTimeout(() => {
+        userNameInput.focus();
+      }, 120);
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('active');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      unlockScroll();
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', closeModal);
+    successDoneBtn.addEventListener('click', closeModal);
+
+    // Escape Key listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modalOverlay.classList.contains('active')) closeModal();
+        if (menuOverlay.classList.contains('active')) closeMenu();
+      }
+    });
+
+    // Handle Form Submit Stub
+    visitForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!visitForm.checkValidity()) {
+        visitForm.reportValidity();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      // Simulate network request duration
+      setTimeout(() => {
+        const firstName = userNameInput.value.split(' ')[0] || "there";
+        successNameSpan.textContent = firstName;
+
+        // Switch views
+        formContainer.style.display = 'none';
+        successContainer.style.display = 'block';
+      }, 800);
+    });
+
+    // Close Modal Close hover animation (rotate X)
+    const closeSvgs = [document.querySelector('#modalCloseBtn svg'), document.querySelector('#menuCloseBtn svg')];
+    closeSvgs.forEach((svg, idx) => {
+      if (svg) {
+        const parent = svg.parentElement;
+        parent.addEventListener('mouseenter', () => {
+          springs.animate(`close-rot-${idx}`, 90, 300, 18, (rot) => {
+            svg.style.transform = `rotate(${rot}deg)`;
+          });
+        });
+        parent.addEventListener('mouseleave', () => {
+          springs.animate(`close-rot-${idx}`, 0, 300, 18, (rot) => {
+            svg.style.transform = `rotate(${rot}deg)`;
+          });
+        });
+      }
+    });
+
+    // Clean anchor scrolls inside landing page
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (targetId.startsWith('#') && targetId.length > 1) {
+          e.preventDefault();
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            lenis.scrollTo(targetEl);
+          }
+        }
+      });
+    });
+
+  </script>
+</body>
+
+</html>

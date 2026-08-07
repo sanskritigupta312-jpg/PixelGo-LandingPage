@@ -1,0 +1,63 @@
+/* ══════════════════════════════════════════
+
+   COMPARISON TABLE
+
+══════════════════════════════════════════ */
+
+.comparison{padding:8rem 5vw;background:var(--ink);position:relative;overflow:hidden}
+.comparison-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 80% 50%,rgba(201,168,76,0.05),transparent 60%)}
+.comparison-inner{max-width:1100px;margin:0 auto}
+.comparison-header{text-align:center;max-width:600px;margin:0 auto 4rem}
+.comp-table{width:100%;border-collapse:collapse;position:relative}
+.comp-table thead th{padding:16px 20px;font-size:0.8rem;font-weight:600;border-bottom:1px solid var(--border)}
+.comp-table tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s}
+.comp-table tbody tr:hover{background:rgba(255,255,255,0.02)}
+.comp-table tbody tr:last-child{border:none}
+.comp-table td{padding:14px 20px;vertical-align:middle}
+.comp-feature{font-size:0.88rem;color:var(--white);font-weight:500}
+.comp-sub{font-size:0.72rem;color:var(--muted);margin-top:2px}
+.comp-legacy{text-align:center;background:rgba(255,255,255,0.02)}
+.comp-pg{text-align:center;background:linear-gradient(180deg,rgba(76,111,255,0.08),rgba(76,111,255,0.04));border-left:1px solid rgba(76,111,255,0.2);border-right:1px solid rgba(76,111,255,0.2)}
+.comp-table tbody tr:last-child td.comp-pg{border-radius:0 0 8px 8px;border-bottom:2px solid var(--electric)}
+.check-yes{color:var(--mint);font-weight:700;font-size:1.1rem}
+.check-no{color:#4b5563;font-size:1.1rem}
+.check-partial{color:var(--gold);font-size:1rem}
+.comp-table{font-size:0.85rem}
+.comp-table{font-size:0.75rem}
+/* Section 7: Comparison Table (ODD - DARK) */
+
+.comparison { background: var(--ink, #080B18) !important; color: var(--white, #FAFAF8) !important; }
+/* Comparison Section Get Started Button Responsive Placement */
+
+@media (min-width: 768px) {
+
+  .comp-btn-mobile { display: none !important; }
+.comp-btn-row-desktop { display: table-row !important; }
+.comp-table tbody tr:last-child td.comp-pg {
+
+    border-bottom: none !important;
+
+    border-radius: 0 !important;
+
+  }
+.comp-table tfoot tr.comp-btn-row-desktop td.comp-pg {
+
+    text-align: center;
+
+    background: linear-gradient(180deg, rgba(76, 111, 255, 0.04), rgba(76, 111, 255, 0.12));
+
+    border-left: 1px solid rgba(76, 111, 255, 0.2);
+
+    border-right: 1px solid rgba(76, 111, 255, 0.2);
+
+    border-bottom: 2px solid var(--electric);
+
+    border-radius: 0 0 12px 12px;
+
+    padding: 24px 12px;
+
+  }
+@media (max-width: 767px) {
+
+  .comp-btn-mobile { display: block !important; }
+.comp-btn-row-desktop { display: none !important; }
