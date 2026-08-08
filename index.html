@@ -404,16 +404,16 @@
         .split-text {
             flex: 1;
             max-width: 450px;
+            width: 100%;
         }
 
         .split-image {
             flex: 1;
-            max-width: 400px; /* Replaced flex-basis with max-width to fix column layout issue */
+            max-width: 450px; /* Matched with text for perfect symmetry */
+            width: 100%;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 16px 40px rgba(0,0,0,0.2);
-            /* Optional: ensure it centers on mobile if needed */
-            margin: 0 auto;
         }
 
         .split-image img {
