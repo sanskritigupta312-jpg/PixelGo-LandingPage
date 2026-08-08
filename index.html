@@ -103,11 +103,32 @@
 
             /* Hero title appropriately scaled */
             .hero-title {
-                font-size: clamp(2.2rem, 5vw, 3.5rem) !important;
+                font-size: clamp(1.75rem, 5vw, 2.5rem) !important;
                 font-weight: 300 !important;
                 letter-spacing: 0.02em !important;
                 line-height: 1.15 !important;
                 font-family: var(--sans, sans-serif) !important;
+            }
+
+            /* Adjust remaining text content and reduce gaps in hero for mobile */
+            .hero-copy {
+                font-size: 0.85rem !important;
+                line-height: 1.5 !important;
+                margin-top: 0.85rem !important;
+            }
+
+            .hero-foot {
+                margin-top: 1.5rem !important;
+            }
+
+            .hero-cta {
+                font-size: 0.8rem !important;
+                padding: 10px 18px !important;
+            }
+
+            .hero-cred {
+                font-size: 0.65rem !important;
+                margin-top: 0.6rem !important;
             }
 
             /* --- 3. Bring Desktop Carousel Styles to Mobile --- */
