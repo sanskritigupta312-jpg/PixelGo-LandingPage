@@ -299,70 +299,95 @@
             z-index: 2 !important;
         }
 
-        /* Image Gallery Row Section */
-        .gallery-row-section {
-            padding: 4rem 5vw; /* Added side gaps */
-            max-width: 1400px;
-            margin: 0 auto;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; 
-            -ms-overflow-style: none;
+        /* Infinite Carousel Marquee */
+        .gallery-marquee-wrapper {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            padding: 4rem 0;
+            background: #ffffff;
+        }
+
+        .gallery-marquee {
+            display: flex;
+            width: max-content;
+            animation: scroll-marquee 30s linear infinite;
+            gap: 1.5rem;
+        }
+
+        .gallery-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 0.75rem)); }
+        }
+
+        .gallery-marquee img {
+            height: 320px;
+            width: auto;
+            min-width: 240px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .gallery-marquee img:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
         }
         
-        .gallery-row-section::-webkit-scrollbar {
-            display: none;
+        @media (max-width: 768px) {
+            .gallery-marquee img {
+                height: 240px;
+                min-width: 180px;
+            }
         }
 
-        .gallery-row {
+        /* Split Feature Section */
+        .split-feature-section {
             display: flex;
-            flex-direction: row;
-            gap: 0.5rem; /* Decreased gap */
-            justify-content: center;
             align-items: center;
-            width: max-content;
-            margin: 0 auto;
-            perspective: 1200px; /* 3D perspective added */
-            padding: 2rem 0;
+            justify-content: space-between;
+            max-width: var(--container-width);
+            margin: 6rem auto;
+            padding: 0 24px;
+            gap: 4rem;
         }
 
-        .gallery-row img {
-            height: 280px; /* Reduced to medium size */
-            width: auto;
-            min-width: 180px; /* Reduced width */
+        .split-feature-section.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .split-text {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .split-image {
+            flex: 1;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .split-image img {
+            width: 100%;
+            height: auto;
+            display: block;
             object-fit: cover;
-            border-radius: 12px;
-            transform: rotateY(-15deg) scale(0.95); /* 3D tilt */
-            box-shadow: -15px 15px 25px rgba(0, 0, 0, 0.2);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
-            position: relative;
-            z-index: 1;
         }
 
-        .gallery-row img:hover {
-            transform: rotateY(0deg) scale(1.15) translateY(-10px); /* 3D pop-up */
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-            z-index: 10;
-        }
-
-        @media (max-width: 1024px) {
-            .gallery-row {
-                justify-content: flex-start;
-                margin: 0;
-                padding: 1rem 0;
+        @media (max-width: 900px) {
+            .split-feature-section, .split-feature-section.reverse {
+                flex-direction: column;
+                gap: 2.5rem;
             }
-            .gallery-row-section {
-                padding: 3rem 24px;
-            }
-            .gallery-row img {
-                height: 220px;
-                min-width: 140px;
-                transform: rotateY(0deg) scale(1); /* Simplify 3D on mobile for better touch UX */
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            }
-            .gallery-row img:hover {
-                transform: scale(1.05) translateY(-5px);
+            .split-text {
+                max-width: 100%;
             }
         }
     </style>
@@ -880,10 +905,7 @@
                         charged to rooms. Bar bills forgotten. PixelGo closes every one of these gaps.</span>
                 </div>
 
-                <!-- Natural Hotel Image integrated into Problem Section -->
-                <div class="integrated-image reveal-inview" style="margin-top: 3.5rem; max-width: 440px; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.25);">
-                    <img src="images/natural_hotel_exterior_1786213500976.png" alt="Natural Hotel Exterior" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: cover;" />
-                </div>
+
             </div>
 
             <div class="problem-right">
@@ -920,10 +942,30 @@
                     </div>
                 </article>
 
-                <!-- Natural Hotel Image integrated into Problem Right Section -->
-                <div class="integrated-image reveal-inview" style="margin-top: 2rem; max-width: 440px; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.25); transition-delay: 300ms;">
-                    <img src="images/natural_hotel_interior_1786213525240.png" alt="Natural Hotel Interior" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: cover;" />
-                </div>
+            </div>
+        </section>
+
+        <!-- Split Feature 1 -->
+        <section class="split-feature-section reveal-inview">
+            <div class="split-text">
+                <div class="eyebrow tone-dark">Premium Experience</div>
+                <h2 class="problem-title" style="margin-bottom: 1rem;">Elevate Your Property.</h2>
+                <p class="problem-desc" style="max-width: 100%;">Your hotel delivers a five-star physical experience. PixelGo ensures your software delivers a five-star operational experience. Say goodbye to clunky 90s interfaces.</p>
+            </div>
+            <div class="split-image">
+                <img src="images/natural_hotel_exterior_1786213500976.png" alt="Natural Hotel Exterior" loading="lazy">
+            </div>
+        </section>
+
+        <!-- Split Feature 2 -->
+        <section class="split-feature-section reverse reveal-inview">
+            <div class="split-text">
+                <div class="eyebrow tone-dark">Beautiful Design</div>
+                <h2 class="problem-title" style="margin-bottom: 1rem;">Software That Breathes.</h2>
+                <p class="problem-desc" style="max-width: 100%;">We designed PixelGo with natural aesthetics and calm workflows, reducing staff fatigue and errors so they can focus on what matters most — the guests.</p>
+            </div>
+            <div class="split-image">
+                <img src="images/natural_hotel_interior_1786213525240.png" alt="Natural Hotel Interior" loading="lazy">
             </div>
         </section>
 
@@ -1152,17 +1194,25 @@
             </div>
         </section>
 
-        <!-- Image Gallery Row Section -->
-        <section class="gallery-row-section reveal-inview">
-            <div class="gallery-row">
-                <img src="images/hotel_gallery_1_1786214555901.png" alt="Natural Hotel Exterior" loading="lazy">
+        <!-- Image Gallery Marquee -->
+        <div class="gallery-marquee-wrapper reveal-inview">
+            <div class="gallery-marquee">
+                <!-- Original set -->
+                <img src="images/hotel_gallery_1_1786214555901.png" alt="Hotel Exterior" loading="lazy">
+                <img src="images/hotel_gallery_2_1786214573800.png" alt="Resort Pool" loading="lazy">
+                <img src="images/hotel_gallery_3_1786214590813.png" alt="Hotel Room" loading="lazy">
+                <img src="images/hotel_gallery_4_1786214607462.png" alt="Hotel Restaurant" loading="lazy">
+                <img src="images/hotel_gallery_5_1786214624472.png" alt="Hotel Bathroom" loading="lazy">
+                <img src="images/hotel_gallery_6_1786214642056.png" alt="Hotel Reception" loading="lazy">
+                <!-- Duplicated set for seamless loop -->
+                <img src="images/hotel_gallery_1_1786214555901.png" alt="Hotel Exterior" loading="lazy">
                 <img src="images/hotel_gallery_2_1786214573800.png" alt="Resort Pool" loading="lazy">
                 <img src="images/hotel_gallery_3_1786214590813.png" alt="Hotel Room" loading="lazy">
                 <img src="images/hotel_gallery_4_1786214607462.png" alt="Hotel Restaurant" loading="lazy">
                 <img src="images/hotel_gallery_5_1786214624472.png" alt="Hotel Bathroom" loading="lazy">
                 <img src="images/hotel_gallery_6_1786214642056.png" alt="Hotel Reception" loading="lazy">
             </div>
-        </section>
+        </div>
 
         <!-- 8) Comparison Section -->
         <section class="comparison-section" id="comparison">
