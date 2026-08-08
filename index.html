@@ -215,28 +215,27 @@
            FIX 1: Mobile Mega Menu — Scroll Enable
            ============================================================ */
         .menu-panel {
-            display: flex !important;
-            flex-direction: column !important;
-            overflow: hidden !important;
+            display: block !important;
+            overflow-y: auto !important;
+            height: 100% !important;
+            -webkit-overflow-scrolling: touch !important;
         }
 
         .menu-inner {
-            flex: 1 1 auto !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            -webkit-overflow-scrolling: touch !important;
             display: block !important;
+            height: auto !important;
+            overflow: visible !important;
         }
 
         .menu-mega-body {
             display: block !important;
-            overflow: visible !important;
             height: auto !important;
+            overflow: visible !important;
         }
         
         .menu-footer {
             margin-top: 2rem !important;
+            padding-bottom: 2rem !important;
             display: flex !important;
             justify-content: center !important;
         }
@@ -292,7 +291,7 @@
     <!-- Fullscreen Menu Overlay (Mobile) -->
     <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
         <div class="menu-backdrop" id="menuBackdrop"></div>
-        <div class="menu-panel" id="menuPanel">
+        <div class="menu-panel" id="menuPanel" data-lenis-prevent>
             <div class="menu-inner">
                 <div class="menu-header">
                     <div class="menu-logo">
