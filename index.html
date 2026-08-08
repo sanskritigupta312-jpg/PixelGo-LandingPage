@@ -191,6 +191,14 @@
                 filter: brightness(0) !important;
                 opacity: 1 !important;
             }
+            
+            .hero-wrapper {
+                display: flex !important;
+                flex-direction: column !important;
+                flex: 1 1 auto !important;
+                min-height: 0 !important;
+                width: 100% !important;
+            }
         }
 
         @keyframes heroBrandScrollMobile {
@@ -218,14 +226,19 @@
             overflow-y: auto !important;
             overflow-x: hidden !important;
             -webkit-overflow-scrolling: touch !important;
+            display: block !important;
         }
 
         .menu-mega-body {
-            flex: 1 1 auto !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            -webkit-overflow-scrolling: touch !important;
+            display: block !important;
+            overflow: visible !important;
+            height: auto !important;
+        }
+        
+        .menu-footer {
+            margin-top: 2rem !important;
+            display: flex !important;
+            justify-content: center !important;
         }
 
         /* ============================================================
