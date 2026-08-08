@@ -298,6 +298,34 @@
             position: relative !important;
             z-index: 2 !important;
         }
+        
+        /* Image Banner Styles */
+        .image-banner {
+            max-width: var(--container-width);
+            margin: 4rem auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        
+        .image-banner img {
+            width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        @media (max-width: 767px) {
+            .image-banner {
+                margin: 3rem auto;
+                padding: 0 16px;
+            }
+            .image-banner img {
+                border-radius: 16px;
+                max-height: 400px;
+            }
+        }
     </style>
 </head>
 
@@ -707,29 +735,10 @@
             </dl>
         </section>
 
-        <!-- 4) Brand Logo Carousel -->
-        <!-- <section class="brand-carousel-section"> -->
-        <!-- <div class="brand-carousel-title">
-        Trusted by <span>500+ Indian Hotels, Resorts & Restaurants</span> Across 40+ Cities
-      </div> -->
-        <!-- <div class="brand-track-wrapper">
-        <div class="brand-logo-track">
-          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Grand Palace</div>
-          <div class="brand-logo-card"><span class="bl-icon">🌴</span>Regency Resorts</div>
-          <div class="brand-logo-card"><span class="bl-icon">🍽️</span>Spice Table Café</div>
-          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Shiv Palace</div>
-          <div class="brand-logo-card"><span class="bl-icon">🎪</span>Royal Banquets</div>
-          <div class="brand-logo-card"><span class="bl-icon">🍺</span>The Heights Bar</div>
-
-          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Grand Palace</div>
-          <div class="brand-logo-card"><span class="bl-icon">🌴</span>Regency Resorts</div>
-          <div class="brand-logo-card"><span class="bl-icon">🍽️</span>Spice Table Café</div>
-          <div class="brand-logo-card"><span class="bl-icon">🏨</span>Shiv Palace</div>
-          <div class="brand-logo-card"><span class="bl-icon">🎪</span>Royal Banquets</div>
-          <div class="brand-logo-card"><span class="bl-icon">🍺</span>The Heights Bar</div>
-        </div>
-      </div> -->
-        <!-- </section> -->
+        <!-- Premium Image Banner -->
+        <section class="image-banner reveal-inview">
+            <img src="images/natural_hotel_exterior_1786213500976.png" alt="Premium Natural Hotel Exterior" loading="lazy" />
+        </section>
 
         <!-- 5) Business Modules Section -->
         <section class="modules-section" id="modules">
@@ -813,6 +822,12 @@
                 </li>
             </ul>
         </section>
+
+        <!-- Premium Interior Banner -->
+        <section class="image-banner reveal-inview">
+            <img src="images/natural_hotel_interior_1786213525240.png" alt="Premium Natural Hotel Interior" loading="lazy" />
+        </section>
+
 
         <!-- 6) Problem Section (The Fragmentation Trap) -->
         <section class="problem-section">
