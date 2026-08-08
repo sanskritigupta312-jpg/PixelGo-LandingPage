@@ -298,34 +298,6 @@
             position: relative !important;
             z-index: 2 !important;
         }
-        
-        /* Image Banner Styles */
-        .image-banner {
-            max-width: var(--container-width);
-            margin: 4rem auto;
-            padding: 0 24px;
-            width: 100%;
-        }
-        
-        .image-banner img {
-            width: 100%;
-            height: auto;
-            max-height: 600px;
-            object-fit: cover;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-        
-        @media (max-width: 767px) {
-            .image-banner {
-                margin: 3rem auto;
-                padding: 0 16px;
-            }
-            .image-banner img {
-                border-radius: 16px;
-                max-height: 400px;
-            }
-        }
     </style>
 </head>
 
@@ -735,10 +707,7 @@
             </dl>
         </section>
 
-        <!-- Premium Image Banner -->
-        <section class="image-banner reveal-inview">
-            <img src="images/natural_hotel_exterior_1786213500976.png" alt="Premium Natural Hotel Exterior" loading="lazy" />
-        </section>
+
 
         <!-- 5) Business Modules Section -->
         <section class="modules-section" id="modules">
@@ -823,10 +792,7 @@
             </ul>
         </section>
 
-        <!-- Premium Interior Banner -->
-        <section class="image-banner reveal-inview">
-            <img src="images/natural_hotel_interior_1786213525240.png" alt="Premium Natural Hotel Interior" loading="lazy" />
-        </section>
+
 
 
         <!-- 6) Problem Section (The Fragmentation Trap) -->
@@ -845,6 +811,11 @@
                     <span class="problem-stat-text"><strong>Real money is disappearing every month.</strong> Restaurant
                         orders not
                         charged to rooms. Bar bills forgotten. PixelGo closes every one of these gaps.</span>
+                </div>
+
+                <!-- Natural Hotel Image integrated into Problem Section -->
+                <div class="integrated-image reveal-inview" style="margin-top: 3.5rem; max-width: 440px; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.25);">
+                    <img src="images/natural_hotel_exterior_1786213500976.png" alt="Natural Hotel Exterior" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: cover;" />
                 </div>
             </div>
 
@@ -881,6 +852,11 @@
                             PixelGo embeds the process in software, not in individuals.</p>
                     </div>
                 </article>
+
+                <!-- Natural Hotel Image integrated into Problem Right Section -->
+                <div class="integrated-image reveal-inview" style="margin-top: 2rem; max-width: 440px; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.25); transition-delay: 300ms;">
+                    <img src="images/natural_hotel_interior_1786213525240.png" alt="Natural Hotel Interior" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: cover;" />
+                </div>
             </div>
         </section>
 
