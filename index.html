@@ -306,13 +306,15 @@
             position: relative;
             padding: 4rem 0;
             background: #ffffff;
+            perspective: 1200px;
         }
 
         .gallery-marquee {
             display: flex;
             width: max-content;
-            animation: scroll-marquee 30s linear infinite;
+            animation: scroll-marquee 15s linear infinite;
             gap: 1.5rem;
+            transform-style: preserve-3d;
         }
 
         .gallery-marquee:hover {
@@ -330,14 +332,15 @@
             min-width: 240px;
             object-fit: cover;
             border-radius: 16px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -15px 15px 25px rgba(0, 0, 0, 0.2);
+            transform: rotateY(-15deg) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
         }
 
         .gallery-marquee img:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            transform: rotateY(0deg) scale(1.15) translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         }
         
         @media (max-width: 768px) {
@@ -368,10 +371,10 @@
         }
 
         .split-image {
-            flex: 1;
-            border-radius: 24px;
+            flex: 0 1 400px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.2);
         }
 
         .split-image img {
