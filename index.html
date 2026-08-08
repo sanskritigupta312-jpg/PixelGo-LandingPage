@@ -298,6 +298,62 @@
             position: relative !important;
             z-index: 2 !important;
         }
+
+        /* Image Gallery Row Section */
+        .gallery-row-section {
+            padding: 4rem 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        
+        .gallery-row-section::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-row {
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            width: max-content;
+            margin: 0 auto;
+        }
+
+        .gallery-row img {
+            height: 380px;
+            width: auto;
+            min-width: 240px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .gallery-row img:hover {
+            transform: scale(1.08) translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+        }
+
+        @media (max-width: 1024px) {
+            .gallery-row {
+                justify-content: flex-start;
+                margin: 0;
+            }
+            .gallery-row-section {
+                padding: 3rem 16px;
+            }
+            .gallery-row img {
+                height: 300px;
+                min-width: 200px;
+            }
+        }
     </style>
 </head>
 
@@ -1082,6 +1138,18 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Image Gallery Row Section -->
+        <section class="gallery-row-section reveal-inview">
+            <div class="gallery-row">
+                <img src="images/hotel_gallery_1_1786214555901.png" alt="Natural Hotel Exterior" loading="lazy">
+                <img src="images/hotel_gallery_2_1786214573800.png" alt="Resort Pool" loading="lazy">
+                <img src="images/hotel_gallery_3_1786214590813.png" alt="Hotel Room" loading="lazy">
+                <img src="images/hotel_gallery_4_1786214607462.png" alt="Hotel Restaurant" loading="lazy">
+                <img src="images/hotel_gallery_5_1786214624472.png" alt="Hotel Bathroom" loading="lazy">
+                <img src="images/hotel_gallery_6_1786214642056.png" alt="Hotel Reception" loading="lazy">
             </div>
         </section>
 
