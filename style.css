@@ -2932,7 +2932,7 @@
                 margin-top: 4px;
                 line-height: 1.5;
             }
-
+        }
 
             /* Mobile Modules Section Padding Override */
             @media (max-width: 767px) {
@@ -4194,8 +4194,6 @@
                 }
 
             }
-
-            /* END @media (min-width: 1024px) — closes the outer block from line 2774 */
 
 /* ============================================================
        SECTION SIDE PADDING — same left/right as hero text (1.5rem mobile, 3.5rem desktop)
