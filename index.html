@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
     <!-- SECTION PADDING + HERO MOBILE FIXES — in a separate style block, outside all media queries -->
 
 
@@ -201,6 +201,64 @@
             100% {
                 transform: translateX(-50%);
             }
+        }
+
+        /* ============================================================
+           FIX 1: Mobile Mega Menu — Scroll Enable
+           ============================================================ */
+        .menu-panel {
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+
+        .menu-inner {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        .menu-mega-body {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        /* ============================================================
+           FIX 2: Mobile Menu Logo Visible
+           ============================================================ */
+        .menu-logo .logo-mark {
+            width: auto !important;
+            height: 28px !important;
+            max-width: none !important;
+        }
+
+        /* ============================================================
+           FIX 3: Footer "Ready to Unify" — Same Line Always
+           ============================================================ */
+        .footer-cta-band {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            justify-content: space-between !important;
+            align-items: flex-end !important;
+            gap: 1.5rem !important;
+        }
+
+        /* ============================================================
+           FIX 4: Sync Connector Lines Behind Widgets (z-index fix)
+           ============================================================ */
+        .sync-connector {
+            z-index: 0 !important;
+        }
+
+        .sync-node {
+            position: relative !important;
+            z-index: 2 !important;
         }
     </style>
 </head>
