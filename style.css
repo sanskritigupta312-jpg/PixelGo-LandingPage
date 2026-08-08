@@ -2047,6 +2047,7 @@
         /* Mobile App Section */
         .mobile-section {
             background: var(--brand-deep);
+            color: #ffffff;
             border-radius: var(--radius-card-lg);
             padding: 5rem 1.5rem;
             display: grid;

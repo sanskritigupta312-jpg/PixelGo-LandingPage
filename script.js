@@ -967,4 +967,14 @@ import Lenis from 'lenis';
                 }
             });
         });
+        // Mobile Footer Accordion
+        const footerNavTitles = document.querySelectorAll('.footer-nav-title');
+        footerNavTitles.forEach(title => {
+            title.addEventListener('click', () => {
+                if (window.innerWidth <= 767) {
+                    const col = title.closest('.footer-nav-col');
+                    col.classList.toggle('open');
+                }
+            });
+        });
 })();
