@@ -22,6 +22,7 @@
     <style>
         /* Desktop margins for all sections and footer except hero */
         @media (min-width: 1024px) {
+
             main>section:not(.hero-section):not(.hero),
             main>footer {
                 margin: 20px 60px;
@@ -30,6 +31,7 @@
 
         /* Mobile Zero-Gaps, Remove Curves, and Autofit Padding for all sections */
         @media (max-width: 1023px) {
+
             main>section:not(.hero-section):not(.hero),
             main>footer {
                 margin: 0 !important;
@@ -203,7 +205,7 @@
     <div class="loader-curtain" id="preloader">
         <div class="loader-wordmark" id="loaderWordmark">
             <img src="https://pixelgo.live/assets/images/logo_icon/logo.png" alt="PixelGo" class="logo-mark"
-                style="height: 32px;" />
+                style="height: 40px; width: auto;" />
         </div>
         <div class="loader-track">
             <div class="loader-fill" id="loaderFill"></div>
@@ -1313,10 +1315,9 @@
             <div class="footer-grid">
                 <!-- Brand column -->
                 <div class="footer-brand-col">
-                    <div class="footer-logo">
+                    <div class="footer-logo" style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
                         <img src="https://pixelgo.live/assets/images/logo_icon/logo.png" alt="PixelGo" class="logo-mark"
-                            style="width: 24px; height: 24px;" />
-                        <span>PixelGo</span>
+                            style="height: 40px; width: auto;" />
                     </div>
                     <p class="footer-blurb">Turn your PMS into an intelligent growth engine. Designed from scratch for
                         modern
