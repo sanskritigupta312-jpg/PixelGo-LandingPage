@@ -1838,8 +1838,7 @@
             border: 1px solid var(--hairline);
             border-radius: 0.75rem;
             padding: 0.75rem;
-            text-align: center;
-            z-index: 2;
+            text-align: center; position: relative; z-index: 2;
             flex: 1;
             max-width: 7.5rem;
             transition: all 0.3s;
@@ -2923,6 +2922,8 @@
                 width: 200px;
                 justify-content: center;
             }
+        }
+
 
             /* Offcanvas Mega Menu Body Styles */
             .menu-mega-body {
@@ -2998,7 +2999,6 @@
                 margin-top: 4px;
                 line-height: 1.5;
             }
-        }
 
             /* Mobile Modules Section Padding Override */
             @media (max-width: 767px) {
@@ -3046,14 +3046,7 @@
                 .programs-title,
                 .stats-title,
                 .testimonials-title,
-                .footer-cta-title,
-                .problem-header h2,
-                .feature-content h2,
-                .mobile-content h2,
-                .comparison-header h2 {
-                    font-size: 2rem !important;
-                    line-height: 1.05 !important;
-                }
+                .problem-header h2, .feature-content h2, .mobile-content h2, .comparison-header h2 { font-size: 2rem !important; line-height: 1.05 !important; } .footer-cta-title { font-size: 1.8rem !important; line-height: 1.05 !important; white-space: nowrap !important; }
 
                 /* Force exactly 20px left and right padding on all section wrappers and header inner containers */
                 .dashboard-section,
@@ -4460,9 +4453,7 @@
             /* Make first column stick */
             .comp-table th:first-child,
             .comp-table td:first-child {
-                position: sticky;
-                left: 0;
-                z-index: 2;
+                
                 background: #050710;
                 min-width: 130px;
                 max-width: 160px;
@@ -4471,3 +4462,4 @@
                 background: rgba(28, 42, 94, 0.9);
             }
         }
+
