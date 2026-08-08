@@ -3014,7 +3014,7 @@
 
 
             /* ── MOBILE ACCORDION AND IMPROVEMENTS OVERRIDES ── */
-            @media (max-width: 767px) {
+            @media (max-width: 1023px) {
 
                 /* Stats Section Padding Override */
                 #comparison.stats-section {

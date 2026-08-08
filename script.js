@@ -971,7 +971,7 @@ import Lenis from 'lenis';
         const footerNavTitles = document.querySelectorAll('.footer-nav-title');
         footerNavTitles.forEach(title => {
             title.addEventListener('click', () => {
-                if (window.innerWidth <= 767) {
+                if (window.innerWidth <= 1023) {
                     const col = title.closest('.footer-nav-col');
                     col.classList.toggle('open');
                 }

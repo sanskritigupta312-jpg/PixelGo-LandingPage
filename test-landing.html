@@ -4147,6 +4147,7 @@
           max-height: 30px;
           max-width: 90px;
         }
+      }
 
     } /* END @media (min-width: 1024px) — closes the outer block from line 2774 */
 
@@ -4156,100 +4157,302 @@
   <style>
 
     /* ============================================================
-       SECTION SIDE PADDING — same left/right as hero text (1.5rem mobile, 3.5rem desktop)
+       NON-HERO SECTIONS — consistent side margin + inner padding
+       Applied individually so each section gets its own gap
        ============================================================ */
-    .dashboard-section,
-    .problem-section,
-    .programs-section,
-    .interactive-feature-section,
-    .mobile-section,
-    .comparison-section,
-    .testimonials-section,
-    .features-section,
-    .modules-section,
-    .stats-section,
-    .blog-section,
-    footer {
-      padding-left: 1.5rem !important;
-      padding-right: 1.5rem !important;
+    .hero-section {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Every section except hero gets the same side margin */
+    section:not(.hero-section) {
+      margin-inline: clamp(1rem, 3vw, 2.5rem) !important;
+      padding-block: clamp(3rem, 6vw, 6rem) !important;
+      padding-inline: clamp(1.5rem, 4vw, 3.5rem) !important;
       box-sizing: border-box !important;
     }
 
-    @media (min-width: 1024px) {
-      .dashboard-section,
-      .problem-section,
-      .programs-section,
-      .interactive-feature-section,
-      .mobile-section,
-      .comparison-section,
-      .testimonials-section,
-      .features-section,
-      .modules-section,
-      .stats-section,
-      .blog-section,
-      footer {
-        padding-left: 3.5rem !important;
-        padding-right: 3.5rem !important;
-      }
+    /* Stats section also gets side margin + rounded corners */
+    .stats-section {
+      border-radius: 20px !important;
+      padding: clamp(4rem, 8vw, 7rem) clamp(2rem, 5vw, 4rem) !important;
+    }
+
+    /* Footer gets full side margin + rounded corners */
+    footer {
+      margin: clamp(1rem, 3vw, 2.5rem) !important;
+      padding-inline: clamp(1.5rem, 4vw, 3.5rem) !important;
+      padding-block: clamp(2rem, 4vw, 3rem) !important;
+      box-sizing: border-box !important;
+      border-radius: 20px !important;
+      overflow: hidden !important;
+    }
+
+    section:not(.hero-section) > *,
+    footer > * {
+      max-width: min(1320px, 100%) !important;
+      width: 100% !important;
+      margin-inline: auto !important;
     }
 
     /* ============================================================
-       HERO SECTION — Mobile: text overlays image
+       HERO LAYOUT — Full-width left-aligned, matching reference image
        ============================================================ */
-    @media (max-width: 1023px) {
-      /* Make hero a stacking context so content sits on top of image */
-      .hero-section {
-        position: relative !important;
-        min-height: 100svh !important;
-        display: flex !important;
-        flex-direction: column !important;
-        padding-bottom: 0 !important;
-      }
+    .hero {
+      min-height: 100svh !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
 
-      /* The dashboard mock (right column) hides on mobile — content goes on top of bg */
-      .hero-right-side {
-        display: none !important;
-      }
+    .hero-media {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center center !important;
+    }
 
-      /* hero-content-grid becomes single column with text overlaying image */
-      .hero-content-grid {
-        position: relative !important;
-        z-index: 2 !important;
-        padding: 2rem 1.5rem !important;
-        flex: 1 !important;
-      }
+    .hero-content {
+      position: relative !important;
+      z-index: 2 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-end !important;
+      gap: 1.5rem !important;
+      padding: clamp(80px, 10vh, 120px) clamp(1.5rem, 6.4vw, 7rem) clamp(2.5rem, 5vh, 5rem) !important;
+      min-height: 100svh !important;
+      color: #ffffff !important;
+      box-sizing: border-box !important;
+    }
 
-      /* Ensure bg image still fills */
-      .hero-bg {
-        position: absolute !important;
-        inset: 0 !important;
-        top: 0 !important;
-        height: 100% !important;
-        z-index: 0 !important;
-      }
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 5.5rem) !important;
+      line-height: 1.0 !important;
+      max-width: 14ch !important;
+      letter-spacing: -0.02em !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      color: #ffffff !important;
+      margin: 0 !important;
+    }
 
-      .hero-bg img {
-        opacity: 0.35 !important;
-      }
+    .hero-copy {
+      font-size: clamp(0.9rem, 1.4vw, 1.05rem) !important;
+      max-width: 30ch !important;
+      color: rgba(255, 255, 255, 0.85) !important;
+      line-height: 1.65 !important;
+      margin: 0 !important;
+    }
 
-      .hero-left-side {
-        position: relative !important;
-        z-index: 2 !important;
-      }
+    .hero-foot {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: flex-end !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 1rem 2rem !important;
+      margin-top: 0.5rem !important;
+      width: 100% !important;
+    }
+
+    .hero-cta {
+      font-size: 0.72rem !important;
+      letter-spacing: 0.12em !important;
+      text-transform: uppercase !important;
+      color: rgba(255,255,255,0.9) !important;
+      background: transparent !important;
+      border: none !important;
+      cursor: pointer !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      white-space: nowrap !important;
+    }
+
+    .hero-cred {
+      font-size: 0.72rem !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+      color: rgba(255,255,255,0.6) !important;
+      max-width: 30ch !important;
+      line-height: 1.6 !important;
+      margin: 0 !important;
+      text-align: right !important;
+    }
+
+    .hero-cred strong {
+      color: #ffffff !important;
+      font-weight: 600 !important;
+    }
+
+    .hero-scrim {
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 1 !important;
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.72) 0%,
+        rgba(0,0,0,0.42) 50%,
+        rgba(0,0,0,0.1) 100%
+      ) !important;
+      pointer-events: none !important;
     }
 
     /* ============================================================
-       HERO BRAND CAROUSEL — mobile: show ~2 cards, auto scroll
+       HERO BRAND CAROUSEL — light pill, dark logo, 2 visible
        ============================================================ */
-    @media (max-width: 767px) {
+    .hero-brand-strip {
+      background: #111111 !important;
+      padding: 1.1rem 0 !important;
+      overflow: hidden !important;
+    }
+
+    .hero-brand-label {
+      text-align: center !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+      color: rgba(255,255,255,0.5) !important;
+      padding: 0 1rem 0.75rem !important;
+    }
+
+    .hero-brand-track-wrapper {
+      overflow: hidden !important;
+      position: relative !important;
+      width: 100% !important;
+    }
+
+    .hero-brand-track-wrapper::before,
+    .hero-brand-track-wrapper::after {
+      content: "" !important;
+      position: absolute !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      width: 80px !important;
+      z-index: 2 !important;
+      pointer-events: none !important;
+    }
+
+    .hero-brand-track-wrapper::before {
+      left: 0 !important;
+      background: linear-gradient(90deg, #111111 0%, transparent 100%) !important;
+    }
+
+    .hero-brand-track-wrapper::after {
+      right: 0 !important;
+      background: linear-gradient(-90deg, #111111 0%, transparent 100%) !important;
+    }
+
+    .hero-brand-track {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.75rem !important;
+      width: max-content !important;
+      animation: heroBrandScroll 22s linear infinite !important;
+    }
+
+    @keyframes heroBrandScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* 2 logos visible on mobile: width = (100vw - gap*3) / 2 */
+    .hero-brand-item {
+      flex-shrink: 0 !important;
+      width: calc((100vw - 2.25rem) / 2) !important;
+      min-width: 120px !important;
+      max-width: 180px !important;
+      padding: 0.6rem 1rem !important;
+      height: 52px !important;
+      border-radius: 100px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #f4f4f4 !important;
+      border: none !important;
+    }
+
+    .hero-brand-item img {
+      max-height: 26px !important;
+      max-width: 100% !important;
+      object-fit: contain !important;
+      filter: brightness(0) !important;
+    }
+
+    /* Desktop: narrower pills, more logos show */
+    @media (min-width: 768px) {
       .hero-brand-item {
-        width: calc(50vw - 24px) !important;
-        min-width: 130px !important;
-        max-width: 180px !important;
-        flex-shrink: 0 !important;
+        width: 160px !important;
+        max-width: 160px !important;
+      }
+
+      .hero-foot {
+        flex-direction: row !important;
+      }
+
+      .hero-cred {
+        font-size: 0.72rem !important;
+        max-width: 28rem !important;
       }
     }
 
+    @media (max-width: 767px) {
+      .hero-content {
+        justify-content: flex-end !important;
+        padding-top: 90px !important;
+        padding-bottom: clamp(2rem, 5vw, 3rem) !important;
+        gap: 0.85rem !important;
+      }
+
+      .hero-title {
+        font-size: clamp(2rem, 10vw, 2.8rem) !important;
+        max-width: 100% !important;
+      }
+
+      .hero-copy {
+        font-size: 0.9rem !important;
+        max-width: 90% !important;
+      }
+
+      .hero-foot {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.6rem !important;
+      }
+
+      .hero-cred {
+        font-size: 0.68rem !important;
+        text-align: left !important;
+        max-width: 90% !important;
+      }
+
+      .hero-scrim {
+        background: linear-gradient(
+          180deg,
+          rgba(0,0,0,0.55) 0%,
+          rgba(0,0,0,0.15) 40%,
+          rgba(0,0,0,0.72) 100%
+        ) !important;
+      }
+
+      section:not(.hero-section) {
+        margin-inline: 0.75rem !important;
+        padding-inline: 1.1rem !important;
+        padding-block: 2.5rem !important;
+      }
+
+      footer {
+        margin: 0.75rem !important;
+        padding-inline: 1.1rem !important;
+      }
+    }
   </style>
 
   <!-- Lenis importmap -->
@@ -11706,7 +11909,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ── PARALLAX LOGIC ──
-    
+    const heroBg = document.getElementById('heroBg');
     lenis.on('scroll', (e) => {
       // Hero Parallax background plate (0% -> 12% shift)
       const scrollY = window.scrollY;
@@ -11745,7 +11948,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Animate Hero text elements in
       setTimeout(() => {
-              }, 300);
+        revealWords(document.getElementById('heroTitle'), "The Hotel Operating System", 1100, 0, 140);
+      }, 300);
 
       // Remove curtain from DOM after transition completes
       setTimeout(() => {
