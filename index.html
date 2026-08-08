@@ -392,9 +392,9 @@
             align-items: center;
             justify-content: space-between;
             max-width: var(--container-width);
-            margin: 6rem auto;
+            margin: 3rem auto; /* Reduced from 6rem to close the gap */
             padding: 0 24px;
-            gap: 4rem;
+            gap: 3rem;
         }
 
         .split-feature-section.reverse {
@@ -407,15 +407,18 @@
         }
 
         .split-image {
-            flex: 0 1 400px;
+            flex: 1;
+            max-width: 400px; /* Replaced flex-basis with max-width to fix column layout issue */
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+            /* Optional: ensure it centers on mobile if needed */
+            margin: 0 auto;
         }
 
         .split-image img {
             width: 100%;
-            height: auto;
+            height: 100%; /* Ensure it fills the container if it stretches */
             display: block;
             object-fit: cover;
         }
@@ -423,7 +426,8 @@
         @media (max-width: 900px) {
             .split-feature-section, .split-feature-section.reverse {
                 flex-direction: column;
-                gap: 2.5rem;
+                gap: 2rem;
+                margin: 2rem auto; /* Less gap on mobile */
             }
             .split-text {
                 max-width: 100%;
