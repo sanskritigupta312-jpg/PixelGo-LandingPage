@@ -303,58 +303,63 @@ import Lenis from 'lenis';
         let selectedHotel = 'all';
 
         // Dropdown list creation for switcher
-        const switcherDropdown = document.createElement('div');
-        switcherDropdown.className = 'header-standard-dropdown';
-        switcherDropdown.style.top = '100%';
-        switcherDropdown.style.left = '0';
-        switcherDropdown.style.width = '10rem';
-        switcherDropdown.style.padding = '0.5rem';
-        switcherDropdown.innerHTML = `
-      <a href="javascript:void(0)" class="dropdown-link-item" data-val="all">All Hotels</a>
-      <a href="javascript:void(0)" class="dropdown-link-item" data-val="regency">Grand Regency</a>
-      <a href="javascript:void(0)" class="dropdown-link-item" data-val="palace">Shiv Palace</a>
-    `;
-        hotelSwitcher.appendChild(switcherDropdown);
+        if (hotelSwitcher && switcherLabel) {
+            const switcherDropdown = document.createElement('div');
+            switcherDropdown.className = 'header-standard-dropdown';
+            switcherDropdown.style.top = '100%';
+            switcherDropdown.style.left = '0';
+            switcherDropdown.style.width = '10rem';
+            switcherDropdown.style.padding = '0.5rem';
+            switcherDropdown.innerHTML = `
+          <a href="javascript:void(0)" class="dropdown-link-item" data-val="all">All Hotels</a>
+          <a href="javascript:void(0)" class="dropdown-link-item" data-val="regency">Grand Regency</a>
+          <a href="javascript:void(0)" class="dropdown-link-item" data-val="palace">Shiv Palace</a>
+        `;
+            hotelSwitcher.appendChild(switcherDropdown);
 
-        hotelSwitcher.addEventListener('click', (e) => {
-            e.stopPropagation();
-            switcherDropdown.style.opacity = switcherDropdown.style.opacity === '1' ? '0' : '1';
-            switcherDropdown.style.visibility = switcherDropdown.style.visibility === 'visible' ? 'hidden' : 'visible';
-            switcherDropdown.style.transform = switcherDropdown.style.transform === 'translateY(0px)' ? 'translateY(1rem)' : 'translateY(0px)';
-        });
-
-        document.addEventListener('click', () => {
-            switcherDropdown.style.opacity = '0';
-            switcherDropdown.style.visibility = 'hidden';
-            switcherDropdown.style.transform = 'translateY(1rem)';
-        });
-
-        switcherDropdown.querySelectorAll('.dropdown-link-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const val = item.getAttribute('data-val');
-                switcherLabel.textContent = item.textContent;
-                selectedHotel = val;
-                updateMockDashboard();
+            hotelSwitcher.addEventListener('click', (e) => {
+                e.stopPropagation();
+                switcherDropdown.style.opacity = switcherDropdown.style.opacity === '1' ? '0' : '1';
+                switcherDropdown.style.visibility = switcherDropdown.style.visibility === 'visible' ? 'hidden' : 'visible';
+                switcherDropdown.style.transform = switcherDropdown.style.transform === 'translateY(0px)' ? 'translateY(1rem)' : 'translateY(0px)';
             });
-        });
+
+            document.addEventListener('click', () => {
+                switcherDropdown.style.opacity = '0';
+                switcherDropdown.style.visibility = 'hidden';
+                switcherDropdown.style.transform = 'translateY(1rem)';
+            });
+
+            switcherDropdown.querySelectorAll('.dropdown-link-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const val = item.getAttribute('data-val');
+                    switcherLabel.textContent = item.textContent;
+                    selectedHotel = val;
+                    updateMockDashboard();
+                });
+            });
+        }
 
         function updateMockDashboard() {
             const data = hotelData[selectedHotel];
 
             // Update metrics
             const metricNums = document.querySelectorAll('.mock-metric-num');
-            metricNums[0].textContent = data.metrics[0];
-            metricNums[1].textContent = data.metrics[1];
-            metricNums[2].textContent = data.metrics[2];
-            metricNums[3].textContent = data.metrics[3];
+            if (metricNums.length >= 4) {
+                metricNums[0].textContent = data.metrics[0];
+                metricNums[1].textContent = data.metrics[1];
+                metricNums[2].textContent = data.metrics[2];
+                metricNums[3].textContent = data.metrics[3];
+            }
 
             // Update bookings
             const bookingsBox = document.querySelector('.mock-bookings');
-            bookingsBox.innerHTML = `<div class="mock-section-title">Active Bookings</div>`;
-            data.bookings.forEach(b => {
-                const row = document.createElement('div');
-                row.className = 'mock-row';
-                row.innerHTML = `
+            if (bookingsBox) {
+                bookingsBox.innerHTML = `<div class="mock-section-title">Active Bookings</div>`;
+                data.bookings.forEach(b => {
+                    const row = document.createElement('div');
+                    row.className = 'mock-row';
+                    row.innerHTML = `
           <div>
             <div class="mock-row-name">${b.name}</div>
             <div class="mock-row-sub">${b.sub}</div>
@@ -364,27 +369,30 @@ import Lenis from 'lenis';
             <div class="mock-amount" style="margin-top:3px">${b.amt}</div>
           </div>
         `;
-                bookingsBox.appendChild(row);
-            });
+                    bookingsBox.appendChild(row);
+                });
+            }
 
             // Update chart bars
             const bars = document.querySelectorAll('.mock-bars .mock-bar');
             bars.forEach((bar, i) => {
-                bar.style.height = `${data.chart[i]}%`;
+                if (data.chart[i]) bar.style.height = `${data.chart[i]}%`;
             });
 
             // Update status row
             const statusBox = document.getElementById('heroStatus');
-            statusBox.innerHTML = '';
-            data.status.forEach(s => {
-                const div = document.createElement('div');
-                div.className = 'mock-status';
-                div.innerHTML = `
+            if (statusBox) {
+                statusBox.innerHTML = '';
+                data.status.forEach(s => {
+                    const div = document.createElement('div');
+                    div.className = 'mock-status';
+                    div.innerHTML = `
           <div class="status-dot ${s.dot}"></div>
           <div class="mock-status-text"><strong>${s.label}</strong>${s.sub}</div>
         `;
-                statusBox.appendChild(div);
-            });
+                    statusBox.appendChild(div);
+                });
+            }
         }
 
         tabButtons.forEach(btn => {
