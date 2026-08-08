@@ -20,10 +20,23 @@
   { "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm" } }
   </script>
     <style>
-        /* Add margins to all sections and footer except hero */
-        main>section:not(.hero-section):not(.hero),
-        main>footer {
-            margin: 20px 60px;
+        /* Desktop margins for all sections and footer except hero */
+        @media (min-width: 1024px) {
+            main>section:not(.hero-section):not(.hero),
+            main>footer {
+                margin: 20px 60px;
+            }
+        }
+
+        /* Mobile Zero-Gaps, Remove Curves, and Autofit Padding for all sections */
+        @media (max-width: 1023px) {
+            main>section:not(.hero-section):not(.hero),
+            main>footer {
+                margin: 0 !important;
+                border-radius: 0 !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
         }
 
         /* ============================================================
