@@ -1586,6 +1586,21 @@
             z-index: 1;
         }
 
+        /* Fix text contrast on light background sections */
+        .features-section .features-section-title,
+        .features-section .features-section-desc,
+        .features-section .feature-title,
+        .features-section .feature-desc,
+        .features-section .feat-point-row h4,
+        .features-section .feat-point-row p,
+        .features-section .sync-node-name,
+        .features-section .sync-node-sub,
+        .features-section .vl-name,
+        .features-section .vl-desc,
+        .features-section .receipt-row {
+            color: #0a0a0a !important;
+        }
+
         @media (min-width: 640px) {
             .features-section {
                 padding: 6rem 2.5rem;
@@ -1959,6 +1974,12 @@
         @media (min-width: 640px) {
             .comparison-section {
                 padding: 7rem 2.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .comparison-section {
+                border-radius: var(--radius-card-lg);
             }
         }
 
@@ -4356,3 +4377,4 @@
         flex-shrink: 0 !important;
     }
 }
+
