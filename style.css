@@ -1867,7 +1867,7 @@
             height: 1.5px;
             background: var(--hairline);
             margin: 0 -5px;
-            z-index: 1;
+            z-index: 0;
             position: relative;
             overflow: hidden;
         }
@@ -2520,16 +2520,11 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             padding-bottom: 3.5rem;
             display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        @media (min-width: 640px) {
-            .footer-cta-band {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: flex-end;
-            }
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 1.5rem;
         }
 
         .footer-cta-title {
@@ -2814,6 +2809,9 @@
             opacity: 0;
             transform: translateY(-2rem);
             transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .menu-overlay.active {
@@ -2832,7 +2830,8 @@
 
         .menu-inner {
             width: 100%;
-            height: 100%;
+            flex: 1 1 auto;
+            min-height: 0;
             border-radius: 0;
             background: var(--surface);
             border: none;
@@ -2842,6 +2841,7 @@
             color: var(--ink);
             overflow-y: auto;
             overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .menu-header {
@@ -2854,10 +2854,16 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.2em;
+        }
+
+        /* Override global .logo-mark size inside mobile menu */
+        .menu-logo .logo-mark {
+            width: auto !important;
+            height: 28px !important;
+            max-width: none !important;
         }
 
         .menu-close {
@@ -2924,15 +2930,16 @@
             }
         }
 
-
             /* Offcanvas Mega Menu Body Styles */
             .menu-mega-body {
                 display: flex;
                 flex-direction: column;
                 gap: 2rem;
                 flex: 1 1 auto;
+                min-height: 0;
                 overflow-y: auto;
                 overflow-x: hidden;
+                -webkit-overflow-scrolling: touch;
                 padding: 0.5rem 0;
             }
 
