@@ -1832,6 +1832,7 @@
             justify-content: space-between;
             align-items: center;
             position: relative;
+            isolation: isolate;
         }
 
         .sync-node {
@@ -1840,14 +1841,17 @@
             border: 1px solid var(--hairline);
             border-radius: 0.75rem;
             padding: 0.75rem;
-            text-align: center; position: relative; z-index: 2;
+            text-align: center;
+            position: relative;
+            z-index: 2;
             flex: 1;
             max-width: 7.5rem;
             transition: all 0.3s;
         }
 
         .sync-node.active-glow {
-            background: rgba(76, 111, 255, 0.12);
+            background-color: var(--surface-card);
+            background-image: linear-gradient(rgba(76, 111, 255, 0.12), rgba(76, 111, 255, 0.12));
             border-color: var(--brand);
             box-shadow: 0 0 15px rgba(76, 111, 255, 0.25);
         }
@@ -1869,7 +1873,7 @@
             height: 1.5px;
             background: var(--hairline);
             margin: 0 -5px;
-            z-index: 0;
+            z-index: -1;
             position: relative;
             overflow: hidden;
         }

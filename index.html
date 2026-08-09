@@ -290,13 +290,22 @@
         /* ============================================================
            FIX 4: Sync Connector Lines Behind Widgets (z-index fix)
            ============================================================ */
+        .sync-nodes {
+            isolation: isolate !important;
+        }
+
         .sync-connector {
-            z-index: 0 !important;
+            z-index: -1 !important;
         }
 
         .sync-node {
             position: relative !important;
             z-index: 2 !important;
+            background-color: var(--surface-card) !important;
+        }
+
+        .sync-node.active-glow {
+            background-image: linear-gradient(rgba(76, 111, 255, 0.12), rgba(76, 111, 255, 0.12)) !important;
         }
 
         /* Infinite Carousel Marquee */
@@ -647,7 +656,7 @@
                 <main class="hero-main">
                     <section class="hero" aria-labelledby="hero-title">
                         <picture>
-                            <img class="hero-media" src="hero-bg.jpg" alt="PixelGo HMS hero background" />
+                            <img class="hero-media" src="new-hero-bg.jpg" alt="PixelGo HMS hero background" />
                         </picture>
 
                         <div class="hero-scrim"></div>
