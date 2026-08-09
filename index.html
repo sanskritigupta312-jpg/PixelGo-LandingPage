@@ -401,9 +401,9 @@
             align-items: center;
             justify-content: center;
             max-width: 1050px;
-            margin: 6rem auto;
+            margin: 6rem auto !important; /* Force auto centering */
             padding: 0 24px;
-            gap: 5rem;
+            gap: 7rem; 
         }
 
         .split-feature-section.reverse {
@@ -412,7 +412,7 @@
 
         .split-text {
             flex: 1;
-            max-width: 450px;
+            max-width: 450px; 
             width: 100%;
         }
 
@@ -438,8 +438,199 @@
                 gap: 2rem;
                 margin: 2rem auto; /* Less gap on mobile */
             }
-            .split-text {
+            .split-text, .split-image {
                 max-width: 100%;
+            }
+        }
+
+        /* ============================================================
+           HOW IT WORKS SECTION
+           ============================================================ */
+        .how-it-works-section {
+            background-color: #030712; /* Very dark background */
+            padding: 6rem 24px;
+            color: #ffffff;
+            font-family: var(--sans, sans-serif);
+        }
+
+        .hiw-container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .hiw-header {
+            margin-bottom: 4rem;
+        }
+
+        .hiw-eyebrow {
+            color: #4C6FFF; /* Blue brand color */
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .hiw-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hiw-subtitle {
+            color: #9CA3AF; /* Light gray */
+            font-size: 1.125rem;
+            margin-bottom: 0;
+        }
+
+        .hiw-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .hiw-card {
+            background-color: #111827; /* Darker card background */
+            border-radius: 32px;
+            display: flex;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: 360px;
+            gap: 2rem;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .hiw-card.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .hiw-image-col {
+            flex: 1;
+            position: relative;
+            min-height: 320px;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .hiw-image-col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 24px;
+        }
+
+        .hiw-step-num {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            font-size: 5rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.3);
+            line-height: 1;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .hiw-card.reverse .hiw-step-num {
+            left: auto;
+            right: 1.5rem;
+        }
+
+        .hiw-content-col {
+            flex: 1.2;
+            padding: 2rem 3rem 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hiw-card.reverse .hiw-content-col {
+            padding: 2rem 1rem 2rem 3rem;
+        }
+
+        .hiw-icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .hiw-card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #ffffff;
+        }
+
+        .hiw-card-subtitle {
+            color: #D1D5DB;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .hiw-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 2rem;
+        }
+
+        .hiw-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: #E5E7EB;
+            font-weight: 500;
+        }
+
+        .hiw-check {
+            color: #4C6FFF;
+            background: rgba(76, 111, 255, 0.1);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .hiw-check svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .hiw-card, .hiw-card.reverse {
+                flex-direction: column;
+            }
+            
+            .hiw-image-col {
+                min-height: 250px;
+            }
+            
+            .hiw-content-col {
+                padding: 2.5rem;
+            }
+            
+            .hiw-features {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .hiw-step-num {
+                top: 1rem;
+                left: 1rem;
+                font-size: 4rem;
+            }
+            
+            .hiw-card.reverse .hiw-step-num {
+                right: auto;
+                left: 1rem;
             }
         }
     </style>
@@ -1337,6 +1528,112 @@
                 </div>
             </div>
         </div>
+
+        <!-- PixelGo Workflow Section -->
+        <section class="how-it-works-section">
+            <div class="hiw-container reveal-inview">
+                <div class="hiw-header">
+                    <span class="hiw-eyebrow">PIXELGO WORKFLOW</span>
+                    <h2 class="hiw-title">Simplify Your Hotel Operations</h2>
+                    <p class="hiw-subtitle">Three steps to unify your property management.</p>
+                </div>
+
+                <div class="hiw-steps">
+                    <!-- Step 1 -->
+                    <div class="hiw-card reveal-inview">
+                        <div class="hiw-image-col">
+                            <span class="hiw-step-num">01</span>
+                            <img src="images/society_exterior.png" alt="Setup Property" loading="lazy">
+                        </div>
+                        <div class="hiw-content-col">
+                            <span class="hiw-icon">🏢</span>
+                            <h3 class="hiw-card-title">Set Up Your Property</h3>
+                            <p class="hiw-card-subtitle">Configure your hotel structure and business modules in minutes.</p>
+                            <div class="hiw-features">
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Define room categories</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Set up POS outlets</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Configure staff roles</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Customize billing & taxes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="hiw-card reverse reveal-inview" style="transition-delay: 100ms;">
+                        <div class="hiw-image-col">
+                            <span class="hiw-step-num">02</span>
+                            <img src="images/modern_interior.png" alt="Automate Operations" loading="lazy">
+                        </div>
+                        <div class="hiw-content-col">
+                            <span class="hiw-icon">💻</span>
+                            <h3 class="hiw-card-title">Automate Daily Operations</h3>
+                            <p class="hiw-card-subtitle">Manage bookings, check-ins, and POS from a single unified dashboard.</p>
+                            <div class="hiw-features">
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Daily & Hourly bookings</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Real-time POS to room sync</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Instant KOT printing</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Automated guest comms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="hiw-card reveal-inview" style="transition-delay: 200ms;">
+                        <div class="hiw-image-col">
+                            <span class="hiw-step-num">03</span>
+                            <img src="images/living_room_tv.png" alt="Track Revenue" loading="lazy">
+                        </div>
+                        <div class="hiw-content-col">
+                            <span class="hiw-icon">📈</span>
+                            <h3 class="hiw-card-title">Track & Grow Revenue</h3>
+                            <p class="hiw-card-subtitle">Make informed decisions with real-time analytics and zero revenue leakage.</p>
+                            <div class="hiw-features">
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Live P&L dashboard</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Track staff performance</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>Multi-vendor data isolation</span>
+                                </div>
+                                <div class="hiw-feature">
+                                    <div class="hiw-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l4 4L19 7" /></svg></div>
+                                    <span>White-label booking engine</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- 8) Comparison Section -->
         <section class="comparison-section" id="comparison">
